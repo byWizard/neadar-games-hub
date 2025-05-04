@@ -13,6 +13,15 @@
     <p>Игры, которые я полностью прошёл или планирую пройти</p>
   </header>
 
+  <div class="search-filter">
+    <input type="text" id="searchInput" placeholder="Найти игру..." />
+    <select id="filterSelect">
+      <option value="all">Все</option>
+      <option value="done">Пройденные</option>
+      <option value="want">Хочу пройти</option>
+    </select>
+  </div>
+
   <section class="cards">
 
     <!-- Карточка: Elden Ring -->
@@ -21,18 +30,17 @@
       <h2>Elden Ring</h2>
       <span class="status done">Пройдена</span>
       <div>⭐⭐⭐⭐⭐</div>
-      <small>Прошёл в марте 2024</small>
-      <p>Огромный открытый мир, потрясающая графика и сложные боссы. Одна из моих любимых RPG за последнее время.</p>
+      <small>Прошёл в марте 2025</small>
+      <p>Огромный открытый мир, потрясающая графика и сложные боссы.</p>
     </div>
 
     <!-- Карточка: Cyberpunk 2077 -->
     <div class="card">
       <img src="images/cyberpunk.jpg" alt="Cyberpunk 2077">
       <h2>Cyberpunk 2077</h2>
-      <span class="status done">Пройдена</span>
+      <span class="status want">Хочу пройти</span>
       <div>⭐⭐⭐⭐☆</div>
-      <small>Прошёл в декабре 2023</small>
-      <p>Потрясающий мир Night City. После ребаланса и апдейта Phantom Liberty игра стала намного лучше!</p>
+      <p>После ребаланса и обновления Phantom Liberty стала почти шедевром.</p>
     </div>
 
     <!-- Карточка: The Witcher 3 -->
@@ -41,8 +49,8 @@
       <h2>The Witcher 3</h2>
       <span class="status done">Пройдена</span>
       <div>⭐⭐⭐⭐⭐</div>
-      <small>Прошёл в июле 2023</small>
-      <p>Эпичное приключение Геральта с отличной историей и великолепным окружением. Настоящая классика.</p>
+      <small>Прошёл в июле 2024</small>
+      <p>Эпичное приключение Геральта с отличной историей и великолепным окружением.</p>
     </div>
 
     <!-- Карточка: Red Dead Redemption 2 -->
@@ -51,7 +59,7 @@
       <h2>Red Dead Redemption 2</h2>
       <span class="status want">Хочу пройти</span>
       <div>⭐⭐⭐⭐☆</div>
-      <p>Считается шедевром. Планирую поиграть летом. Очень хочу прочувствовать историю Артура Моргана.</p>
+      <p>Считается шедевром. Очень хочу прочувствовать историю Артура Моргана.</p>
     </div>
 
   </section>
@@ -59,5 +67,7 @@
   <footer>
     <p>© 2025 Имя | Хостится на GitHub Pages</p>
   </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
