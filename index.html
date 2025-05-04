@@ -8,11 +8,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
+
   <header>
     <h1>Мои пройденные игры</h1>
     <p>Игры, которые я полностью прошёл или планирую пройти</p>
   </header>
 
+  <!-- Форма добавления -->
+  <section class="add-game">
+    <h2>Добавить новую игру</h2>
+    <form id="addGameForm">
+      <input type="text" id="gameTitle" placeholder="Название игры" required />
+      <input type="url" id="gameImage" placeholder="Ссылка на картинку" required />
+      <textarea id="gameDescription" placeholder="Описание"></textarea>
+      <button type="submit">Добавить игру</button>
+    </form>
+  </section>
+
+  <!-- Поиск и фильтр -->
   <div class="search-filter">
     <input type="text" id="searchInput" placeholder="Найти игру..." />
     <select id="filterSelect">
@@ -22,43 +35,14 @@
     </select>
   </div>
 
-  <section class="cards">
+  <!-- Статистика -->
+  <div class="stats">
+    <p><strong>Пройдено:</strong> <span id="doneCount">0</span></p>
+  </div>
 
-    <!-- Пример карточки -->
-    <div class="card" data-id="elden-ring">
-      <img src="images/elden-ring.jpg" alt="Elden Ring">
-      <h2>Elden Ring</h2>
-      <span class="status done">Пройдена</span>
-      <div class="stars" data-rating="5"></div>
-      <small>Прошёл в марте 2025</small>
-      <textarea class="description">Огромный открытый мир, потрясающая графика и сложные боссы.</textarea>
-    </div>
-
-    <div class="card" data-id="cyberpunk">
-      <img src="images/cyberpunk.jpg" alt="Cyberpunk 2077">
-      <h2>Cyberpunk 2077</h2>
-      <span class="status want">Хочу пройти</span>
-      <div class="stars" data-rating="4"></div>
-      <textarea class="description">После ребаланса и обновления Phantom Liberty стала почти шедевром.</textarea>
-    </div>
-
-    <div class="card" data-id="the-witcher">
-      <img src="images/the-witcher.jpg" alt="The Witcher 3">
-      <h2>The Witcher 3</h2>
-      <span class="status done">Пройдена</span>
-      <div class="stars" data-rating="5"></div>
-      <small>Прошёл в июле 2024</small>
-      <textarea class="description">Эпичное приключение Геральта с отличной историей и великолепным окружением.</textarea>
-    </div>
-
-    <div class="card" data-id="red-dead">
-      <img src="images/red-dead-redemption.jpg" alt="Red Dead Redemption 2">
-      <h2>Red Dead Redemption 2</h2>
-      <span class="status want">Хочу пройти</span>
-      <div class="stars" data-rating="4"></div>
-      <textarea class="description">Считается шедевром. Очень хочу прочувствовать историю Артура Моргана.</textarea>
-    </div>
-
+  <!-- Карточки -->
+  <section class="cards" id="cardsContainer">
+    <!-- Здесь будут динамически добавленные карточки -->
   </section>
 
   <footer>
