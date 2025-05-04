@@ -1,105 +1,98 @@
-// Поиск и фильтр
-const searchInput = document.getElementById("searchInput");
-const filterSelect = document.getElementById("filterSelect");
-const cards = document.querySelectorAll(".card");
+const cardsContainer = document.getElementById("cardsContainer");
+const addGameForm = document.getElementById("addGameForm");
+const gameTitle = document.getElementById("gameTitle");
+const gameImage = document.getElementById("gameImage");
+const gameDescription = document.getElementById("gameDescription");
+const doneCountEl = document.getElementById("doneCount");
 
-function filterCards() {
-  const searchTerm = searchInput.value.toLowerCase();
-  const filterValue = filterSelect.value;
+let games = JSON.parse(localStorage.getItem("games")) || [];
 
-  cards.forEach(card => {
-    const title = card.querySelector("h2").textContent.toLowerCase();
-    const status = card.querySelector(".status").classList.contains("done") ? "done" : "want";
+// Отображение всех игр
+function renderGames() {
+  cardsContainer.innerHTML = "";
+  games.forEach((game, index) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.dataset.id = index;
+    card.innerHTML = `
+      <img src="${game.image}" alt="${game.title}">
+      <h2>${game.title}</h2>
+      <span class="status ${game.status || "want"}">${game.status === "done" ? "Пройдена" : "Хочу пройти"}</span>
+      <div class="stars" data-rating="${game.rating || 0}"></div>
+      <small>Добавлено</small>
+      <textarea class="description">${game.description || ""}</textarea>
+    `;
+    cardsContainer.appendChild(card);
 
-    const matchesSearch = title.includes(searchTerm);
-    const matchesFilter = filterValue === "all" || status === filterValue;
-
-    if (matchesSearch && matchesFilter) {
-      card.style.display = "block";
-    } else {
-      card.style.display = "none";
+    // Рейтинг
+    const starsEl = card.querySelector(".stars");
+    for (let i = 1; i <= 5; i++) {
+      const star = document.createElement("span");
+      star.textContent = "★";
+      star.dataset.rating = i;
+      if (i <= game.rating) star.classList.add("active");
+      starsEl.appendChild(star);
     }
+
+    starsEl.addEventListener("click", e => {
+      if (e.target.tagName === "SPAN") {
+        const rating = parseInt(e.target.dataset.rating);
+        game.rating = rating;
+        starsEl.dataset.rating = rating;
+        starsEl.querySelectorAll("span").forEach((star, idx) => {
+          star.classList.toggle("active", idx < rating);
+        });
+        saveData();
+      }
+    });
+
+    // Статус
+    const statusEl = card.querySelector(".status");
+    statusEl.addEventListener("click", () => {
+      game.status = game.status === "done" ? "want" : "done";
+      statusEl.className = "status " + game.status;
+      statusEl.textContent = game.status === "done" ? "Пройдена" : "Хочу пройти";
+      saveData();
+      updateStats();
+    });
+
+    // Описание
+    const descEl = card.querySelector(".description");
+    descEl.value = game.description || "";
+    descEl.addEventListener("input", () => {
+      game.description = descEl.value;
+      saveData();
+    });
   });
+
+  updateStats();
 }
 
-searchInput.addEventListener("input", filterCards);
-filterSelect.addEventListener("change", filterCards);
+// Сохранение данных
+function saveData() {
+  localStorage.setItem("games", JSON.stringify(games));
+}
 
-// Звезды
-document.querySelectorAll(".stars").forEach(starsEl => {
-  const gameId = starsEl.closest(".card").dataset.id;
-  const currentRating = parseInt(starsEl.dataset.rating) || 0;
-
-  for (let i = 1; i <= 5; i++) {
-    const star = document.createElement("span");
-    star.textContent = "★";
-    star.dataset.rating = i;
-    if (i <= currentRating) star.classList.add("active");
-    starsEl.appendChild(star);
-  }
-
-  // Загрузка из localStorage
-  const savedRating = localStorage.getItem(`rating-${gameId}`);
-  if (savedRating) {
-    starsEl.dataset.rating = savedRating;
-    starsEl.querySelectorAll("span").forEach((star, index) => {
-      star.classList.toggle("active", index < savedRating);
-    });
-  }
-
-  starsEl.addEventListener("click", e => {
-    if (e.target.tagName === "SPAN") {
-      const rating = parseInt(e.target.dataset.rating);
-      starsEl.dataset.rating = rating;
-
-      starsEl.querySelectorAll("span").forEach((star, index) => {
-        star.classList.toggle("active", index < rating);
-      });
-
-      localStorage.setItem(`rating-${gameId}`, rating);
-    }
-  });
+// Добавление новой игры
+addGameForm.addEventListener("submit", e => {
+  e.preventDefault();
+  const newGame = {
+    title: gameTitle.value.trim(),
+    image: gameImage.value.trim(),
+    description: gameDescription.value.trim(),
+    status: "want",
+    rating: 0
+  };
+  games.push(newGame);
+  saveData();
+  renderGames();
+  addGameForm.reset();
 });
 
-// Статус
-document.querySelectorAll(".card").forEach(card => {
-  const statusEl = card.querySelector(".status");
-  const gameId = card.dataset.id;
-  const key = `game-${gameId}-status`;
+// Статистика
+function updateStats() {
+  const done = games.filter(g => g.status === "done").length;
+  doneCountEl.textContent = done;
+}
 
-  const savedStatus = localStorage.getItem(key);
-  if (savedStatus) {
-    statusEl.className = "status " + savedStatus;
-    statusEl.textContent = savedStatus === "done" ? "Пройдена" : "Хочу пройти";
-  }
-
-  statusEl.addEventListener("click", () => {
-    if (statusEl.classList.contains("done")) {
-      statusEl.className = "status want";
-      statusEl.textContent = "Хочу пройти";
-      localStorage.setItem(key, "want");
-    } else {
-      statusEl.className = "status done";
-      statusEl.textContent = "Пройдена";
-      localStorage.setItem(key, "done");
-    }
-
-    filterCards();
-  });
-});
-
-// Описание
-document.querySelectorAll(".description").forEach(textarea => {
-  const card = textarea.closest(".card");
-  const gameId = card.dataset.id;
-  const key = `desc-${gameId}`;
-
-  const savedDesc = localStorage.getItem(key);
-  if (savedDesc) {
-    textarea.value = savedDesc;
-  }
-
-  textarea.addEventListener("input", () => {
-    localStorage.setItem(key, textarea.value);
-  });
-});
+renderGames();
