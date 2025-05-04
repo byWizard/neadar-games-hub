@@ -30,6 +30,34 @@ header p {
   color: #aaa;
 }
 
+.add-game {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.add-game input,
+.add-game textarea,
+.add-game button {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  border: none;
+  font-size: 1rem;
+}
+
+.add-game button {
+  background-color: #4a90e2;
+  color: white;
+  cursor: pointer;
+}
+
+.add-game button:hover {
+  opacity: 0.9;
+}
+
 .search-filter {
   max-width: 600px;
   margin: 0 auto 2rem;
@@ -44,6 +72,13 @@ header p {
   margin-bottom: 0.5rem;
   border-radius: 5px;
   border: none;
+}
+
+.stats {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  color: #7ed321;
 }
 
 .cards {
@@ -66,7 +101,6 @@ header p {
 .card:nth-child(1) { animation-delay: 0.1s; }
 .card:nth-child(2) { animation-delay: 0.2s; }
 .card:nth-child(3) { animation-delay: 0.3s; }
-.card:nth-child(4) { animation-delay: 0.4s; }
 
 .card:hover {
   transform: translateY(-5px) scale(1.02);
