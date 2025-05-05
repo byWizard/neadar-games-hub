@@ -136,6 +136,7 @@ function renderSearchResults(results) {
 // Тема
 function setTheme(theme) {
   // Удаляем старые классы тем
+  console.log("Меняем тему на:", theme);
   document.body.classList.remove("dark-theme", "light-theme");
   // Добавляем новый класс темы
   document.body.classList.add(`${theme}-theme`);
