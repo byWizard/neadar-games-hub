@@ -30,6 +30,21 @@ header p {
   color: #aaa;
 }
 
+#auth-container {
+  text-align: right;
+  margin-top: -2rem;
+  margin-bottom: 2rem;
+}
+
+#loginBtn {
+  padding: 0.5rem 1rem;
+  background-color: #db4437;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .add-game {
   max-width: 600px;
   margin: 0 auto 2rem;
@@ -52,10 +67,6 @@ header p {
   background-color: #4a90e2;
   color: white;
   cursor: pointer;
-}
-
-.add-game button:hover {
-  opacity: 0.9;
 }
 
 .search-filter {
@@ -172,11 +183,13 @@ header p {
   font-size: 0.9rem;
 }
 
-.card small {
-  display: block;
+.delete-btn {
   margin: 0 1rem 0.5rem;
-  font-size: 0.85rem;
-  color: #999;
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 footer {
