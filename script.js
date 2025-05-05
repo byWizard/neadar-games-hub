@@ -391,6 +391,8 @@ canvas.addEventListener("click", function(e) {
   const clickX = e.clientX - rect.left;
   const clickY = e.clientY - rect.top;
 
+  console.log("Клик получен!", clickX, clickY); // Отладка
+
   for (let i = 0; i < 20; i++) {
     const particle = new Particle();
 
