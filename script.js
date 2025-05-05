@@ -3,6 +3,10 @@ const addGameForm = document.getElementById("addGameForm");
 const gameTitle = document.getElementById("gameTitle");
 const gameImage = document.getElementById("gameImage");
 const gameDescription = document.getElementById("gameDescription");
+const gameSearchInput = document.getElementById("gameSearch");
+const searchResults = document.getElementById("searchResults");
+const searchInput = document.getElementById("searchInput");
+const filterSelect = document.getElementById("filterSelect");
 const doneCountEl = document.getElementById("doneCount");
 const authBtn = document.getElementById("authBtn");
 const userStatus = document.getElementById("userStatus");
@@ -26,7 +30,104 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const database = firebase.database();
 
-// Обработчик входа/выхода
+// Кэширование поиска
+const CACHE_KEY = "gameSearchCache";
+const searchCache = loadCacheFromStorage();
+
+function loadCacheFromStorage() {
+  const cached = localStorage.getItem(CACHE_KEY);
+  return cached ? JSON.parse(cached) : {};
+}
+
+function saveCacheToStorage() {
+  localStorage.setItem(CACHE_KEY, JSON.stringify(searchCache));
+}
+
+function getFromCache(query) {
+  const cached = searchCache[query];
+  if (cached && Date.now() < cached.expiresAt) {
+    return cached.data;
+  }
+  return null;
+}
+
+function setToCache(query, data, ttl = 3600000) { // 1 час
+  searchCache[query] = {
+    data,
+    expiresAt: Date.now() + ttl
+  };
+  saveCacheToStorage();
+}
+
+// RAWG API
+const RAWG_API_KEY = "ВАШ_КЛЮЧ_ЗДЕСЬ";
+
+async function searchGame(query) {
+  const cached = getFromCache(query);
+  if (cached) {
+    console.log("Берём из кэша:", query);
+    return cached;
+  }
+
+  try {
+    const response = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}`);
+    const data = await response.json();
+    const results = data.results || [];
+
+    setToCache(query, results);
+    return results;
+  } catch (err) {
+    console.error("Ошибка поиска:", err);
+    return [];
+  }
+}
+
+// Обработчик поиска
+let debounceTimer;
+
+gameSearchInput.addEventListener("input", e => {
+  const query = e.target.value.trim();
+  if (query.length < 3) {
+    searchResults.innerHTML = "";
+    return;
+  }
+
+  clearTimeout(debounceTimer);
+  searchResults.innerHTML = "<li>Ищем игры...</li>";
+
+  debounceTimer = setTimeout(async () => {
+    const results = await searchGame(query);
+    renderSearchResults(results);
+  }, 500);
+});
+
+function renderSearchResults(results) {
+  searchResults.innerHTML = "";
+  if (results.length === 0) {
+    searchResults.innerHTML = "<li>Ничего не найдено</li>";
+    return;
+  }
+
+  results.slice(0, 5).forEach(game => {
+    const li = document.createElement("li");
+    li.textContent = `${game.name}`;
+    li.dataset.image = game.background_image;
+    li.dataset.description = game.short_description || "Описание отсутствует";
+    li.dataset.name = game.name;
+
+    li.addEventListener("click", () => {
+      gameTitle.value = game.name;
+      gameImage.value = game.background_image;
+      gameDescription.value = game.short_description || "";
+
+      searchResults.innerHTML = "";
+    });
+
+    searchResults.appendChild(li);
+  });
+}
+
+// Авторизация
 authBtn.addEventListener("click", () => {
   if (currentUser) {
     auth.signOut();
