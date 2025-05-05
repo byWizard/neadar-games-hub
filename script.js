@@ -13,6 +13,9 @@ const authBtn = document.getElementById("authBtn");
 const userStatus = document.getElementById("userStatus");
 const themeToggle = document.getElementById("themeToggle");
 
+const authOnlyOverlay = document.getElementById("authOnlyOverlay");
+const authRequiredLoginBtn = document.getElementById("authRequiredLoginBtn");
+
 let games = [];
 let currentUser = null;
 
@@ -124,7 +127,7 @@ function renderSearchResults(results) {
   });
 }
 
-// === Темы ===
+// === Тема ===
 function setTheme(theme) {
   document.body.classList.remove("dark-theme", "light-theme");
   document.body.classList.add(`${theme}-theme`);
@@ -155,6 +158,13 @@ authBtn.addEventListener("click", () => {
   }
 });
 
+authRequiredLoginBtn.addEventListener("click", () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).catch(err => {
+    alert("Ошибка входа: " + err.message);
+  });
+});
+
 // === Слушатель состояния пользователя ===
 auth.onAuthStateChanged((user) => {
   if (user) {
@@ -168,16 +178,17 @@ auth.onAuthStateChanged((user) => {
         const data = snapshot.val();
         const firebaseData = data?.games || [];
 
-        const localData = JSON.parse(localStorage.getItem("games")) || [];
-        games = firebaseData.length > 0 ? firebaseData : localData;
-
+        // Используем Firebase, если он не пустой
+        games = firebaseData.length > 0 ? firebaseData : JSON.parse(localStorage.getItem("games")) || [];
         localStorage.setItem("games", JSON.stringify(games));
         renderGames();
+        toggleAuthUI(false); // скрываем оверлей
       })
       .catch(error => {
         console.error("Ошибка при загрузке данных из Firebase:", error);
         games = JSON.parse(localStorage.getItem("games")) || [];
         renderGames();
+        toggleAuthUI(false);
       });
 
   } else {
@@ -186,8 +197,17 @@ auth.onAuthStateChanged((user) => {
     userStatus.textContent = "Вы не вошли";
     games = JSON.parse(localStorage.getItem("games")) || [];
     renderGames();
+    toggleAuthUI(true); // показываем оверлей
   }
 });
+
+function toggleAuthUI(isVisible) {
+  if (isVisible) {
+    authOnlyOverlay.style.display = "flex";
+  } else {
+    authOnlyOverlay.style.display = "none";
+  }
+}
 
 // === Сохранение данных ===
 function saveData() {
@@ -274,7 +294,6 @@ function renderGames() {
       renderGames();
     });
 
-    // Пройденная игра
     if (game.status === "done") {
       statusEl.className = "status done";
       statusEl.textContent = "Пройдена";
@@ -296,7 +315,7 @@ function updateStats() {
   doneCountEl.textContent = done;
 }
 
-// === Экспорт / Импорт ===
+// ==== ЭКСПОРТ / ИМПОРТ ====
 document.getElementById("exportBtn").addEventListener("click", () => {
   const dataStr = JSON.stringify(games, null, 2);
   const blob = new Blob([dataStr], { type: "application/json" });
