@@ -32,7 +32,7 @@ async function searchGame(query) {
   if (cached) return cached;
 
   try {
-    const response = await fetch(`https://api.rawg.io/api/games?key=YOUR_RAWG_API_KEY&search=${encodeURIComponent(query)}`);
+    const response = await fetch(`https://api.rawg.io/api/games?key=48b79844fcc44af7860a5fa89de88ca8&search=${encodeURIComponent(query)}`);
     const data = await response.json();
     const results = data.results || [];
     setToCache(query, results);
