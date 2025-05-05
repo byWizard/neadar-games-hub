@@ -166,12 +166,24 @@ authBtn.addEventListener("click", () => {
 });
 
 // Слушатель состояния пользователя
-auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged(async (user) => {
   if (user) {
     currentUser = user;
     authBtn.textContent = "Выйти";
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
-    loadUserData();
+
+    // Всегда грузим данные из Firebase при входе
+    try {
+      const snapshot = await database.ref(`users/${currentUser.uid}`).once("value");
+      const data = snapshot.val();
+      games = data?.games || [];
+    } catch (error) {
+      console.error("Ошибка загрузки данных:", error);
+      games = [];
+    }
+
+    renderGames();
+
   } else {
     currentUser = null;
     authBtn.textContent = "Войти через Google";
