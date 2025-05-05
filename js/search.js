@@ -1,38 +1,12 @@
-// ========== ПОИСК ЧЕРЕЗ RAWG API ==========
-const CACHE_KEY = "gameSearchCache";
-const searchCache = loadCacheFromStorage();
-
-function loadCacheFromStorage() {
-  const cached = localStorage.getItem(CACHE_KEY);
-  return cached ? JSON.parse(cached) : {};
-}
-
-function saveCacheToStorage() {
-  localStorage.setItem(CACHE_KEY, JSON.stringify(searchCache));
-}
-
-function getFromCache(query) {
-  const cached = searchCache[query];
-  if (cached && Date.now() < cached.expiresAt) {
-    return cached.data;
-  }
-  return null;
-}
-
-function setToCache(query, data, ttl = 3600000) {
-  searchCache[query] = {
-    data,
-    expiresAt: Date.now() + ttl
-  };
-  saveCacheToStorage();
-}
+// search.js
+import { RAWG_API_KEY } from './config.js';
 
 async function searchGame(query) {
   const cached = getFromCache(query);
   if (cached) return cached;
 
   try {
-    const response = await fetch(`https://api.rawg.io/api/games?key=48b79844fcc44af7860a5fa89de88ca8&search=${encodeURIComponent(query)}`);
+    const response = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}`);
     const data = await response.json();
     const results = data.results || [];
     setToCache(query, results);
@@ -43,10 +17,36 @@ async function searchGame(query) {
   }
 }
 
-// ========== ОБРАБОТЧИК ПОИСКА ==========
+function getFromCache(query) {
+  const cache = loadSearchCache();
+  const cached = cache[query];
+  if (cached && Date.now() < cached.expiresAt) {
+    return cached.data;
+  }
+  return null;
+}
+
+function setToCache(query, data, ttl = 3600000) {
+  const cache = loadSearchCache();
+  cache[query] = {
+    data,
+    expiresAt: Date.now() + ttl
+  };
+  localStorage.setItem("gameSearchCache", JSON.stringify(cache));
+}
+
+function loadSearchCache() {
+  const cached = localStorage.getItem("gameSearchCache");
+  return cached ? JSON.parse(cached) : {};
+}
+
+// Обработчик поиска
+const gameSearchInput = document.getElementById("gameSearch");
+const searchResults = document.getElementById("searchResults");
+
 let debounceTimer;
 
-gameSearchInput.addEventListener("input", e => {
+gameSearchInput.addEventListener("input", async e => {
   const query = e.target.value.trim();
   if (query.length < 2) {
     searchResults.innerHTML = "";
@@ -80,14 +80,12 @@ function renderSearchResults(results) {
         </div>
       </div>
     `;
-
     li.addEventListener("click", () => {
-      gameTitle.value = game.name;
-      gameImage.value = game.background_image;
-      gameDescription.value = game.short_description || "";
+      document.getElementById("gameTitle").value = game.name;
+      document.getElementById("gameImage").value = game.background_image;
+      document.getElementById("gameDescription").value = game.short_description || "";
       searchResults.innerHTML = "";
     });
-
     searchResults.appendChild(li);
   });
 }
