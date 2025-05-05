@@ -6,6 +6,11 @@
   <title>Мои пройденные игры</title>
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 </head>
 <body>
 
@@ -13,6 +18,12 @@
     <h1>Мои пройденные игры</h1>
     <p>Игры, которые я полностью прошёл или планирую пройти</p>
   </header>
+
+  <!-- Авторизация -->
+  <div id="auth-container">
+    <button id="loginBtn">Войти через Google</button>
+    <p id="userStatus">Вы не вошли</p>
+  </div>
 
   <!-- Форма добавления -->
   <section class="add-game">
