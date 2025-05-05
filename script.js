@@ -135,10 +135,13 @@ function renderSearchResults(results) {
 
 // Тема
 function setTheme(theme) {
+  // Удаляем старые классы тем
   document.body.classList.remove("dark-theme", "light-theme");
+  // Добавляем новый класс темы
   document.body.classList.add(`${theme}-theme`);
-
+  // Меняем текст кнопки
   themeToggle.textContent = theme === "dark" ? "🌙 Переключить тему" : "☀️ Переключить тему";
+  // Сохраняем тему
   localStorage.setItem("theme", theme);
 }
 
