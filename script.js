@@ -61,7 +61,7 @@ function setToCache(query, data, ttl = 3600000) {
 }
 
 // RAWG API — ЗАМЕНИ ЭТО НА СВОЙ КЛЮЧ
-const RAWG_API_KEY = "48b79844fcc44af7860a5fa89de88ca8";
+const RAWG_API_KEY = "YOUR_RAWG_API_KEY_HERE";
 
 async function searchGame(query) {
   const cached = getFromCache(query);
@@ -172,19 +172,28 @@ auth.onAuthStateChanged(async (user) => {
     authBtn.textContent = "Выйти";
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
 
-    // Всегда грузим данные из Firebase при входе
+    // Грузим данные из Firebase
+    let firebaseData = [];
     try {
       const snapshot = await database.ref(`users/${currentUser.uid}`).once("value");
       const data = snapshot.val();
-      games = data?.games || [];
+      firebaseData = data?.games || [];
     } catch (error) {
-      console.error("Ошибка загрузки данных:", error);
-      games = [];
+      console.error("Ошибка при загрузке данных из Firebase:", error);
     }
+
+    // Если Firebase пустой — грузим из localStorage
+    const localData = JSON.parse(localStorage.getItem("games")) || [];
+
+    games = firebaseData.length > 0 ? firebaseData : localData;
+
+    // Сохраняем в localStorage как резервную копию
+    localStorage.setItem("games", JSON.stringify(games));
 
     renderGames();
 
   } else {
+    // Неавторизован — показываем локальные данные
     currentUser = null;
     authBtn.textContent = "Войти через Google";
     userStatus.textContent = "Вы не вошли";
@@ -193,25 +202,14 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
-// Загрузка данных
-function loadUserData() {
-  database.ref(`users/${currentUser.uid}`).on("value", snapshot => {
-    const data = snapshot.val();
-    games = data?.games || [];
-    renderGames();
-  });
-}
-
 // Сохранение данных
-function saveUserData() {
-  database.ref(`users/${currentUser.uid}`).set({ games });
-}
-
 function saveData() {
+  // Сохраняем в localStorage всегда
+  localStorage.setItem("games", JSON.stringify(games));
+
+  // Сохраняем в Firebase, если пользователь залогинен
   if (currentUser) {
-    saveUserData();
-  } else {
-    localStorage.setItem("games", JSON.stringify(games));
+    database.ref(`users/${currentUser.uid}`).set({ games });
   }
 }
 
