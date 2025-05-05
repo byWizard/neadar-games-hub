@@ -129,27 +129,28 @@ function renderSearchResults(results) {
 }
 
 // Тема
-themeToggle.addEventListener("click", () => {
-  const isDark = document.body.classList.contains("dark-theme");
-  if (isDark) {
-    document.body.classList.remove("dark-theme");
-    document.body.classList.add("light-theme");
-    themeToggle.textContent = "☀️ Переключить тему";
-  } else {
-    document.body.classList.remove("light-theme");
-    document.body.classList.add("dark-theme");
+function setTheme(theme) {
+  document.body.classList.remove("dark-theme", "light-theme");
+  document.body.classList.add(theme + "-theme");
+
+  if (theme === "dark") {
     themeToggle.textContent = "🌙 Переключить тему";
+  } else {
+    themeToggle.textContent = "☀️ Переключить тему";
   }
-  localStorage.setItem("theme", isDark ? "light" : "dark");
+
+  localStorage.setItem("theme", theme);
+}
+
+themeToggle.addEventListener("click", () => {
+  const currentTheme = localStorage.getItem("theme") || "dark";
+  const newTheme = currentTheme === "dark" ? "light" : "dark";
+  setTheme(newTheme);
 });
 
 window.addEventListener("DOMContentLoaded", () => {
   const savedTheme = localStorage.getItem("theme") || "dark";
-  if (savedTheme === "light") {
-    document.body.classList.remove("dark-theme");
-    document.body.classList.add("light-theme");
-    themeToggle.textContent = "☀️ Переключить тему";
-  }
+  setTheme(savedTheme);
 });
 
 // Авторизация
