@@ -166,9 +166,6 @@ authRequiredLoginBtn.addEventListener("click", () => {
 });
 
 // === Слушатель состояния пользователя ===
-// Сразу показываем индикатор
-showLoadingOverlay();
-
 auth.onAuthStateChanged((user) => {
   if (user) {
     currentUser = user;
@@ -180,34 +177,19 @@ auth.onAuthStateChanged((user) => {
       .then(snapshot => {
         const data = snapshot.val();
         const firebaseData = data?.games || [];
-        const localData = JSON.parse(localStorage.getItem("games")) || [];
 
-        games = firebaseData.length > 0 ? firebaseData : localData;
+        // Используем Firebase, если он не пустой
+        games = firebaseData.length > 0 ? firebaseData : JSON.parse(localStorage.getItem("games")) || [];
         localStorage.setItem("games", JSON.stringify(games));
         renderGames();
         toggleAuthUI(false); // скрываем оверлей
       })
       .catch(error => {
         console.error("Ошибка при загрузке данных из Firebase:", error);
-        games = localData;
+        games = JSON.parse(localStorage.getItem("games")) || [];
         renderGames();
         toggleAuthUI(false);
       });
-
-  } else {
-    currentUser = null;
-    authBtn.textContent = "Войти через Google";
-    userStatus.textContent = "Вы не вошли";
-    games = JSON.parse(localStorage.getItem("games")) || [];
-    renderGames();
-    toggleAuthUI(true); // показываем оверлей
-  }
-
-  // Скрываем индикатор после проверки
-  setTimeout(() => {
-    hideLoadingOverlay();
-  }, 500); // небольшая анимация
-});
 
   } else {
     currentUser = null;
@@ -466,14 +448,3 @@ window.addEventListener("resize", () => {
   resizeCanvas();
   initParticles(150);
 });
-
-// ==== загрузка авторизации ====
-const loadingOverlay = document.getElementById("loadingOverlay");
-
-function showLoadingOverlay() {
-  loadingOverlay.style.display = "flex";
-}
-
-function hideLoadingOverlay() {
-  loadingOverlay.style.display = "none";
-}
