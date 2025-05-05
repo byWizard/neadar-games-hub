@@ -448,3 +448,14 @@ window.addEventListener("resize", () => {
   resizeCanvas();
   initParticles(150);
 });
+
+// ==== загрузка авторизации ====
+const loadingOverlay = document.getElementById("loadingOverlay");
+
+function showLoadingOverlay() {
+  loadingOverlay.style.display = "flex";
+}
+
+function hideLoadingOverlay() {
+  loadingOverlay.style.display = "none";
+}
