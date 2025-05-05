@@ -7,10 +7,8 @@
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <!-- Firebase (подключается в firebase-init.js) -->
+  <script type="module" src="/js/main.js"></script>
 </head>
 <body class="dark-theme">
 
@@ -66,21 +64,14 @@
   </div>
 
   <!-- Карточки -->
-  <section class="cards" id="cardsContainer"></section>
+  <section class="cards" id="cardsContainer">
+    <!-- Здесь будут динамически добавленные карточки -->
+  </section>
 
-  <!-- Футер -->
   <footer>
     <p>© 2025 Neadar v1.50 | Хостится на GitHub Pages</p>
     <p><a href="https://t.me/neadar" target="_blank">Telegram: @neadar</a></p>
   </footer>
 
-  <!-- Подключение JS -->
-  <script src="/js/main.js" type="module"></script>
-  <script src="/js/auth.js" type="module"></script>
-  <script src="/js/particles.js" type="module"></script>
-  <script src="/js/cards.js" type="module"></script>
-  <script src="/js/search.js" type="module"></script>
-  <script src="/js/theme.js" type="module"></script>
-  <script src="/js/backup.js" type="module"></script>
 </body>
 </html>
