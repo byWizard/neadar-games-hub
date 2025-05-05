@@ -357,3 +357,93 @@ document.getElementById("importInput").addEventListener("change", e => {
   };
   reader.readAsText(file);
 });
+
+// Частицы фона
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+let width, height;
+let particles = [];
+
+function resizeCanvas() {
+  width = window.innerWidth;
+  height = window.innerHeight;
+  canvas.width = width;
+  canvas.height = height;
+}
+
+class Particle {
+  constructor() {
+    this.reset();
+  }
+
+  reset() {
+    this.x = Math.random() * width;
+    this.y = Math.random() * height;
+    this.radius = Math.random() * 2 + 1;
+    this.alpha = Math.random() * 0.5 + 0.2;
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.vy = (Math.random() - 0.5) * 0.5;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+    ctx.fill();
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+
+    if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+      this.reset();
+    }
+  }
+}
+
+function initParticles(count = 100) {
+  particles = [];
+  for (let i = 0; i < count; i++) {
+    particles.push(new Particle());
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, width, height);
+
+  for (let particle of particles) {
+    particle.update();
+    particle.draw();
+
+    // Линии между близкими частицами
+    for (let other of particles) {
+      const dx = particle.x - other.x;
+      const dy = particle.y - other.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particle.x, particle.y);
+        ctx.lineTo(other.x, other.y);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.05})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+
+// Инициализация
+resizeCanvas();
+initParticles(150);
+animate();
+
+// Обновление при изменении размера окна
+window.addEventListener("resize", () => {
+  resizeCanvas();
+  initParticles(150);
+});
