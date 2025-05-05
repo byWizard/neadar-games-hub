@@ -4,7 +4,7 @@ const gameTitle = document.getElementById("gameTitle");
 const gameImage = document.getElementById("gameImage");
 const gameDescription = document.getElementById("gameDescription");
 const doneCountEl = document.getElementById("doneCount");
-const loginBtn = document.getElementById("loginBtn");
+const authBtn = document.getElementById("authBtn");
 const userStatus = document.getElementById("userStatus");
 
 let games = [];
@@ -16,10 +16,9 @@ const firebaseConfig = {
   authDomain: "my-games-app-hub.firebaseapp.com",
   databaseURL: "https://my-games-app-hub-default-rtdb.firebaseio.com",
   projectId: "my-games-app-hub",
-  storageBucket: "my-games-app-hub.firebasestorage.app",
+  storageBucket: "my-games-app-hub.appspot.com",
   messagingSenderId: "251367004030",
-  appId: "1:251367004030:web:2b1be1b1c76ee80c0d052f",
-  measurementId: "G-ZDJ96FX596"
+  appId: "1:251367004030:web:2b1be1b1c76ee80c0d052f"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -27,27 +26,35 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const database = firebase.database();
 
-// Авторизация
-loginBtn.addEventListener("click", () => {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider);
+// Обработчик входа/выхода
+authBtn.addEventListener("click", () => {
+  if (currentUser) {
+    auth.signOut();
+  } else {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).catch(err => {
+      alert("Ошибка входа: " + err.message);
+    });
+  }
 });
 
-// Слушатель пользователя
+// Слушатель состояния пользователя
 auth.onAuthStateChanged(user => {
   if (user) {
     currentUser = user;
+    authBtn.textContent = "Выйти";
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
     loadUserData();
   } else {
     currentUser = null;
+    authBtn.textContent = "Войти через Google";
     userStatus.textContent = "Вы не вошли";
     games = JSON.parse(localStorage.getItem("games")) || [];
     renderGames();
   }
 });
 
-// Загрузка данных
+// Загрузка данных из Firebase
 function loadUserData() {
   database.ref(`users/${currentUser.uid}`).on("value", snapshot => {
     const data = snapshot.val();
@@ -56,7 +63,7 @@ function loadUserData() {
   });
 }
 
-// Сохранение данных
+// Сохранение данных в Firebase
 function saveUserData() {
   database.ref(`users/${currentUser.uid}`).set({ games });
 }
@@ -91,7 +98,7 @@ function renderGames() {
   games.forEach((game, index) => {
     const card = document.createElement("div");
     card.className = "card";
-    card.dataset.id = index;
+
     card.innerHTML = `
       <img src="${game.image}" alt="${game.title}">
       <h2>${game.title}</h2>
@@ -101,7 +108,6 @@ function renderGames() {
       <textarea class="description">${game.description || ""}</textarea>
       <button class="delete-btn">🗑️ Удалить</button>
     `;
-    cardsContainer.appendChild(card);
 
     // Рейтинг
     const starsEl = card.querySelector(".stars");
@@ -150,12 +156,14 @@ function renderGames() {
       saveData();
       renderGames();
     });
+
+    cardsContainer.appendChild(card);
   });
 
   updateStats();
 }
 
-// Статистика
+// Сохранение данных
 function updateStats() {
   const done = games.filter(g => g.status === "done").length;
   doneCountEl.textContent = done;
