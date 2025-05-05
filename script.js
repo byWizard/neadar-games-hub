@@ -389,8 +389,7 @@ class Particle {
   constructor() {
     this.reset();
     this.pulse = Math.random() * Math.PI * 2; // Начальная фаза пульсации
-    this.pulseSpeed = Math.random() * 0.05 + 0.02; // Скорость пульсации
-    this.speedFactor = Math.random() * 2 + 0.5; // Разная скорость
+    this.pulseSpeed = 0.03; // Постоянная скорость пульсации
   }
 
   reset() {
@@ -403,16 +402,11 @@ class Particle {
   }
 
   draw() {
-    const scale = Math.sin(this.pulse) * 0.3 + 1.3; // Пульсация от 1 до 1.6
-
-    // Создаем мягкий светящийся эффект
-    const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius * scale);
-    gradient.addColorStop(0, `rgba(255, 255, 255, ${this.alpha})`);
-    gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    const scale = Math.sin(this.pulse) * 0.3 + 1.3; // Мягкая пульсация от 1 до 1.6
 
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius * scale, 0, Math.PI * 2);
-    ctx.fillStyle = gradient;
+    ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
     ctx.fill();
 
     this.pulse += this.pulseSpeed;
@@ -429,9 +423,9 @@ class Particle {
         const force = (mouse.radius - distance) / mouse.radius;
         const angle = Math.atan2(dy, dx);
 
-        // Притяжение к курсору с учётом скорости частицы
-        this.vx += -Math.cos(angle) * force * 0.3 * this.speedFactor;
-        this.vy += -Math.sin(angle) * force * 0.3 * this.speedFactor;
+        // Притяжение к курсору
+        this.vx += -Math.cos(angle) * force * 0.3;
+        this.vy += -Math.sin(angle) * force * 0.3;
       }
     }
 
@@ -454,9 +448,7 @@ function initParticles(count = 150) {
 }
 
 function animate() {
-  // Мягкое затемнение предыдущего кадра (эффект "шлейфа")
-  ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-  ctx.fillRect(0, 0, width, height);
+  ctx.clearRect(0, 0, width, height);
 
   for (let particle of particles) {
     particle.update();
@@ -472,14 +464,9 @@ function animate() {
         ctx.beginPath();
         ctx.moveTo(particle.x, particle.y);
         ctx.lineTo(other.x, other.y);
-
-        // Красивая полупрозрачная линия с размытием
-        ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 + 0.05 * Math.random()})`;
-        ctx.lineWidth = 1.2;
-        ctx.shadowBlur = 3;
-        ctx.shadowColor = "white";
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.05})`;
+        ctx.lineWidth = 0.5;
         ctx.stroke();
-        ctx.shadowBlur = 0; // Сбрасываем, чтобы не влияло на другие элементы
       }
     }
   }
