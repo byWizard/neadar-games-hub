@@ -1,4 +1,7 @@
-// ========== ЭКСПОРТ СПИСКА ==========
+// backup.js
+import { games, saveData } from './save.js';
+import { renderGames } from './cards.js';
+
 document.getElementById("exportBtn").addEventListener("click", () => {
   const dataStr = JSON.stringify(games, null, 2);
   const blob = new Blob([dataStr], { type: "application/json" });
@@ -11,7 +14,6 @@ document.getElementById("exportBtn").addEventListener("click", () => {
   URL.revokeObjectURL(url);
 });
 
-// ========== ИМПОРТ СПИСКА ==========
 document.getElementById("importInput").addEventListener("change", e => {
   const file = e.target.files[0];
   if (!file) return;
@@ -20,12 +22,11 @@ document.getElementById("importInput").addEventListener("change", e => {
   reader.onload = (event) => {
     try {
       const importedGames = JSON.parse(event.target.result);
-
       if (Array.isArray(importedGames)) {
         games = importedGames;
         saveData();
         renderGames();
-        alert("✅ Игры успешно импортированы!");
+        alert("✅ Игры импортированы!");
       } else {
         throw new Error("Формат данных неверен");
       }
