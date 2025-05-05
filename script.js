@@ -418,8 +418,8 @@ class Particle {
         const angle = Math.atan2(dy, dx);
 
         // Притяжение к курсору
-        this.vx += -Math.cos(angle) * force * 0.1;
-        this.vy += -Math.sin(angle) * force * 0.1;
+        this.vx += -Math.cos(angle) * force * 0.3;
+        this.vy += -Math.sin(angle) * force * 0.3;
       }
     }
 
