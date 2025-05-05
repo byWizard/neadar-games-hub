@@ -369,3 +369,35 @@ input, textarea, input::placeholder {
   -moz-user-select: none;
   -ms-user-select: none;
 }
+
+/* Спрашиваем авторизацию */
+#authOnlyOverlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+}
+
+#authOnlyOverlay h2 {
+  margin-bottom: 1rem;
+}
+
+#authOnlyOverlay button {
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  background-color: #db4437;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
