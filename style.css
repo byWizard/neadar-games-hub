@@ -38,6 +38,7 @@ body {
   font-family: 'Inter', sans-serif;
   line-height: 1.6;
   padding: 2rem;
+  position: relative;
 }
 
 header {
@@ -327,6 +328,7 @@ footer a:hover {
   border-bottom: none;
 }
 
+/* Частицы */
 #particles {
   position: fixed;
   top: 0;
