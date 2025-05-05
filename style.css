@@ -9,7 +9,18 @@
   --shadow-color: rgba(0, 0, 0, 0.3);
 }
 
-:root.light-theme {
+body.dark-theme {
+  --bg-color: #111;
+  --text-color: #eee;
+  --card-bg: #1c1c1c;
+  --accent-color: #4a90e2;
+  --success-color: #2e8b57;
+  --secondary-text: #aaa;
+  --border-color: #333;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+body.light-theme {
   --bg-color: #f5f5f5;
   --text-color: #111;
   --card-bg: #fff;
