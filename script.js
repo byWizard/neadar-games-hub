@@ -60,7 +60,7 @@ function setToCache(query, data, ttl = 3600000) { // 1 час
 }
 
 // RAWG API
-const RAWG_API_KEY = "ВАШ_КЛЮЧ_ЗДЕСЬ";
+const RAWG_API_KEY = "48b79844fcc44af7860a5fa89de88ca8";
 
 async function searchGame(query) {
   const cached = getFromCache(query);
