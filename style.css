@@ -299,3 +299,19 @@ footer a:hover {
 .search-results li:last-child {
   border-bottom: none;
 }
+
+.backup-section {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.backup-section input[type="file"] {
+  display: none;
+}
+
+.backup-section label {
+  display: inline-block;
+  margin-left: 10px;
+  cursor: pointer;
+  color: var(--accent-color);
+}
