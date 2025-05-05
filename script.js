@@ -1,3 +1,4 @@
+// === DOM Elements ===
 const cardsContainer = document.getElementById("cardsContainer");
 const addGameForm = document.getElementById("addGameForm");
 const gameTitle = document.getElementById("gameTitle");
@@ -15,7 +16,7 @@ const themeToggle = document.getElementById("themeToggle");
 let games = [];
 let currentUser = null;
 
-// Инициализация Firebase
+// === Firebase Setup ===
 const firebaseConfig = {
   apiKey: "AIzaSyDhMfbhd7emAXNKDexXxaCxZ0k2DfkRcVg",
   authDomain: "my-games-app-hub.firebaseapp.com",
@@ -27,11 +28,10 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
 const auth = firebase.auth();
 const database = firebase.database();
 
-// Кэширование поиска
+// === Кэширование поиска ===
 const CACHE_KEY = "gameSearchCache";
 const searchCache = loadCacheFromStorage();
 
@@ -60,7 +60,7 @@ function setToCache(query, data, ttl = 3600000) {
   saveCacheToStorage();
 }
 
-// RAWG API — ЗАМЕНИ ЭТО НА СВОЙ КЛЮЧ
+// === RAWG API поиск ===
 const RAWG_API_KEY = "48b79844fcc44af7860a5fa89de88ca8";
 
 async function searchGame(query) {
@@ -69,12 +69,10 @@ async function searchGame(query) {
     console.log("Берём из кэша:", query);
     return cached;
   }
-
   try {
     const response = await fetch(`https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}`);
     const data = await response.json();
     const results = data.results || [];
-
     setToCache(query, results);
     return results;
   } catch (err) {
@@ -83,19 +81,16 @@ async function searchGame(query) {
   }
 }
 
-// Обработчик поиска
+// === Обработчик поиска ===
 let debounceTimer;
-
 gameSearchInput.addEventListener("input", e => {
   const query = e.target.value.trim();
   if (query.length < 2) {
     searchResults.innerHTML = "";
     return;
   }
-
   clearTimeout(debounceTimer);
   searchResults.innerHTML = "<li>Ищем игры...</li>";
-
   debounceTimer = setTimeout(async () => {
     const results = await searchGame(query);
     renderSearchResults(results);
@@ -108,7 +103,6 @@ function renderSearchResults(results) {
     searchResults.innerHTML = "<li>Ничего не найдено</li>";
     return;
   }
-
   results.slice(0, 5).forEach(game => {
     const li = document.createElement("li");
     li.innerHTML = `
@@ -120,29 +114,21 @@ function renderSearchResults(results) {
         </div>
       </div>
     `;
-
     li.addEventListener("click", () => {
       gameTitle.value = game.name;
       gameImage.value = game.background_image;
       gameDescription.value = game.short_description || "";
-
       searchResults.innerHTML = "";
     });
-
     searchResults.appendChild(li);
   });
 }
 
-// Тема
+// === Темы ===
 function setTheme(theme) {
-  // Удаляем старые классы тем
-  console.log("Меняем тему на:", theme);
   document.body.classList.remove("dark-theme", "light-theme");
-  // Добавляем новый класс темы
   document.body.classList.add(`${theme}-theme`);
-  // Меняем текст кнопки
   themeToggle.textContent = theme === "dark" ? "🌙 Переключить тему" : "☀️ Переключить тему";
-  // Сохраняем тему
   localStorage.setItem("theme", theme);
 }
 
@@ -157,7 +143,7 @@ window.addEventListener("DOMContentLoaded", () => {
   setTheme(savedTheme);
 });
 
-// Авторизация
+// === Авторизация ===
 authBtn.addEventListener("click", () => {
   if (currentUser) {
     auth.signOut();
@@ -169,88 +155,32 @@ authBtn.addEventListener("click", () => {
   }
 });
 
-// Слушатель состояния пользователя
-const mainContent = document.querySelector("body > header, body > section, body > div.backup-section, body > .search-filter, body > .stats");
-const authOnlyOverlay = document.getElementById("authOnlyOverlay");
-const authRequiredLoginBtn = document.getElementById("authRequiredLoginBtn");
-
-function toggleAuthUI(isAuthenticated) {
-  if (isAuthenticated) {
-    // Скрываем оверлей
-    authOnlyOverlay.style.display = "none";
-  } else {
-    // Показываем оверлей
-    authOnlyOverlay.style.display = "flex";
-  }
-}
-
-authRequiredLoginBtn.addEventListener("click", () => {
-  const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).catch(err => {
-    alert("Ошибка входа: " + err.message);
-  });
-});
-
-auth.onAuthStateChanged(async (user) => {
+// === Слушатель состояния пользователя ===
+auth.onAuthStateChanged((user) => {
   if (user) {
     currentUser = user;
     authBtn.textContent = "Выйти";
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
-    
-    // Загружаем данные
-    let firebaseData = [];
-    try {
-      const snapshot = await database.ref(`users/${currentUser.uid}`).once("value");
-      const data = snapshot.val();
-      firebaseData = data?.games || [];
-    } catch (error) {
-      console.error("Ошибка при загрузке данных из Firebase:", error);
-    }
-
-    // Если Firebase есть — используем его
-    const localData = JSON.parse(localStorage.getItem("games")) || [];
-    games = firebaseData.length > 0 ? firebaseData : localData;
-
-    localStorage.setItem("games", JSON.stringify(games));
-    renderGames();
-    toggleAuthUI(true);
-
-  } else {
-    // === КОГДА ПОЛЬЗОВАТЕЛЬ ВЫШЕЛ ===
-    currentUser = null;
-    authBtn.textContent = "Войти через Google";
-    userStatus.textContent = "Вы не вошли";
-
-    // ❗ Сохраняем локально, но очищаем интерфейс
-    localStorage.setItem("games", JSON.stringify(games)); // можно убрать, если хочешь
-    games = []; // Очищаем список
-    renderGames(); // Обновляем UI
-    toggleAuthUI(false);
-  }
-});
 
     // Грузим данные из Firebase
-    let firebaseData = [];
-    try {
-      const snapshot = await database.ref(`users/${currentUser.uid}`).once("value");
-      const data = snapshot.val();
-      firebaseData = data?.games || [];
-    } catch (error) {
-      console.error("Ошибка при загрузке данных из Firebase:", error);
-    }
+    database.ref(`users/${currentUser.uid}`).once("value")
+      .then(snapshot => {
+        const data = snapshot.val();
+        const firebaseData = data?.games || [];
 
-    // Если Firebase пустой — грузим из localStorage
-    const localData = JSON.parse(localStorage.getItem("games")) || [];
+        const localData = JSON.parse(localStorage.getItem("games")) || [];
+        games = firebaseData.length > 0 ? firebaseData : localData;
 
-    games = firebaseData.length > 0 ? firebaseData : localData;
-
-    // Сохраняем в localStorage как резервную копию
-    localStorage.setItem("games", JSON.stringify(games));
-
-    renderGames();
+        localStorage.setItem("games", JSON.stringify(games));
+        renderGames();
+      })
+      .catch(error => {
+        console.error("Ошибка при загрузке данных из Firebase:", error);
+        games = JSON.parse(localStorage.getItem("games")) || [];
+        renderGames();
+      });
 
   } else {
-    // Неавторизован — показываем локальные данные
     currentUser = null;
     authBtn.textContent = "Войти через Google";
     userStatus.textContent = "Вы не вошли";
@@ -259,18 +189,15 @@ auth.onAuthStateChanged(async (user) => {
   }
 });
 
-// Сохранение данных
+// === Сохранение данных ===
 function saveData() {
-  // Сохраняем в localStorage всегда
   localStorage.setItem("games", JSON.stringify(games));
-
-  // Сохраняем в Firebase, если пользователь залогинен
   if (currentUser) {
     database.ref(`users/${currentUser.uid}`).set({ games });
   }
 }
 
-// Добавление игры
+// === Добавление игры ===
 addGameForm.addEventListener("submit", e => {
   e.preventDefault();
   const newGame = {
@@ -286,13 +213,12 @@ addGameForm.addEventListener("submit", e => {
   addGameForm.reset();
 });
 
-// Отображение игр
+// === Отображение игр ===
 function renderGames() {
   cardsContainer.innerHTML = "";
   games.forEach((game, index) => {
     const card = document.createElement("div");
     card.className = "card";
-
     card.innerHTML = `
       <img src="${game.image}" alt="${game.title}">
       <h2>${game.title}</h2>
@@ -303,7 +229,7 @@ function renderGames() {
       <button class="delete-btn">🗑️ Удалить</button>
     `;
 
-    // Рейтинг
+    // Звёзды рейтинга
     const starsEl = card.querySelector(".stars");
     for (let i = 1; i <= 5; i++) {
       const star = document.createElement("span");
@@ -311,20 +237,18 @@ function renderGames() {
       star.dataset.rating = i;
       starsEl.appendChild(star);
     }
-
     updateStarDisplay(starsEl, game.rating || 0);
 
     starsEl.addEventListener("click", e => {
       if (e.target.tagName === "SPAN") {
         const rating = parseInt(e.target.dataset.rating);
         game.rating = rating;
-        starsEl.dataset.rating = rating;
         updateStarDisplay(starsEl, rating);
         saveData();
       }
     });
 
-    // Статус
+    // Статус игры
     const statusEl = card.querySelector(".status");
     statusEl.addEventListener("click", () => {
       game.status = game.status === "done" ? "want" : "done";
@@ -350,16 +274,14 @@ function renderGames() {
       renderGames();
     });
 
-    // Показываем статус
+    // Пройденная игра
     if (game.status === "done") {
       statusEl.className = "status done";
       statusEl.textContent = "Пройдена";
     }
 
-    // Добавляем карточку
     cardsContainer.appendChild(card);
   });
-
   updateStats();
 }
 
@@ -374,59 +296,51 @@ function updateStats() {
   doneCountEl.textContent = done;
 }
 
-// ==== ЭКСПОРТ СПИСКА ====
+// === Экспорт / Импорт ===
 document.getElementById("exportBtn").addEventListener("click", () => {
   const dataStr = JSON.stringify(games, null, 2);
   const blob = new Blob([dataStr], { type: "application/json" });
   const url = URL.createObjectURL(blob);
-
   const a = document.createElement("a");
   a.href = url;
   a.download = "my-games.json";
   a.click();
-
   URL.revokeObjectURL(url);
 });
 
-// ==== ИМПОРТ СПИСКА ====
 document.getElementById("importInput").addEventListener("change", e => {
   const file = e.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = (event) => {
     try {
       const importedGames = JSON.parse(event.target.result);
-
-      // Проверяем, что это массив
       if (Array.isArray(importedGames)) {
         games = importedGames;
-        saveData(); // сохраняет и в Firebase, и в localStorage
+        saveData();
         renderGames();
         alert("✅ Игры успешно импортированы!");
       } else {
         throw new Error("Формат данных неверен");
       }
     } catch (err) {
-      alert("❌ Ошибка при чтении файла. Убедитесь, что это корректный .json файл.");
+      alert("❌ Ошибка при чтении файла.");
       console.error(err);
     }
   };
   reader.readAsText(file);
 });
 
-// Частицы фона
+// === Частицы фона ===
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
-
 let width, height;
 let particles = [];
 
-// Переменные для мыши
 const mouse = {
   x: null,
   y: null,
-  radius: 100 // Радиус действия мыши
+  radius: 100
 };
 
 function resizeCanvas() {
@@ -436,8 +350,7 @@ function resizeCanvas() {
   canvas.height = height;
 }
 
-// Слушатель движения мыши
-window.addEventListener("mousemove", function(e) {
+window.addEventListener("mousemove", function (e) {
   mouse.x = e.clientX;
   mouse.y = e.clientY;
 });
@@ -446,7 +359,6 @@ class Particle {
   constructor() {
     this.reset();
   }
-
   reset() {
     this.x = Math.random() * width;
     this.y = Math.random() * height;
@@ -455,36 +367,26 @@ class Particle {
     this.vx = (Math.random() - 0.5) * 0.5;
     this.vy = (Math.random() - 0.5) * 0.5;
   }
-
   draw() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
     ctx.fill();
   }
-
   update() {
-    // Реакция на мышь
     if (mouse.x !== null && mouse.y !== null) {
       const dx = this.x - mouse.x;
       const dy = this.y - mouse.y;
-      const distance = Math.hypot(dx, dy);
-
-      if (distance < mouse.radius) {
-        const force = (mouse.radius - distance) / mouse.radius;
+      const dist = Math.hypot(dx, dy);
+      if (dist < mouse.radius) {
+        const force = (mouse.radius - dist) / mouse.radius;
         const angle = Math.atan2(dy, dx);
-
-        // Притяжение к курсору
         this.vx += -Math.cos(angle) * force * 0.3;
         this.vy += -Math.sin(angle) * force * 0.3;
       }
     }
-
-    // Обычное движение
     this.x += this.vx;
     this.y += this.vy;
-
-    // Телепортация при выходе за экран
     if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
       this.reset();
     }
@@ -500,37 +402,29 @@ function initParticles(count = 150) {
 
 function animate() {
   ctx.clearRect(0, 0, width, height);
-
   for (let particle of particles) {
     particle.update();
     particle.draw();
-
-    // Линии между близкими частицами
     for (let other of particles) {
       const dx = particle.x - other.x;
       const dy = particle.y - other.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
-
       if (dist < 100) {
         ctx.beginPath();
         ctx.moveTo(particle.x, particle.y);
         ctx.lineTo(other.x, other.y);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${0.05})`;
+        ctx.strokeStyle = `rgba(255, 255, 255, 0.05)`;
         ctx.lineWidth = 0.5;
         ctx.stroke();
       }
     }
   }
-
   requestAnimationFrame(animate);
 }
 
-// Инициализация
 resizeCanvas();
 initParticles(150);
 animate();
-
-// Обновление при изменении размера окна
 window.addEventListener("resize", () => {
   resizeCanvas();
   initParticles(150);
