@@ -388,8 +388,6 @@ window.addEventListener("mousemove", function(e) {
 class Particle {
   constructor() {
     this.reset();
-    this.pulse = Math.random() * Math.PI * 2; // Начальная фаза пульсации
-    this.pulseSpeed = 0.03; // Постоянная скорость пульсации
   }
 
   reset() {
@@ -402,14 +400,10 @@ class Particle {
   }
 
   draw() {
-    const scale = Math.sin(this.pulse) * 0.3 + 1.3;
-
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius * scale, 0, Math.PI * 2);
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
     ctx.fill();
-
-    this.pulse += this.pulseSpeed;
   }
 
   update() {
