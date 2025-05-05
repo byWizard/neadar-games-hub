@@ -1,21 +1,11 @@
-// ========== КАРТОЧКИ ИГР ==========
-addGameForm.addEventListener("submit", e => {
-  e.preventDefault();
-  const newGame = {
-    title: gameTitle.value.trim(),
-    image: gameImage.value.trim(),
-    description: gameDescription.value.trim(),
-    status: "want",
-    rating: 0
-  };
-  games.push(newGame);
-  saveData();
-  renderGames();
-  addGameForm.reset();
-});
+// cards.js
+import { games, saveData } from './save.js';
+import { updateStarDisplay } from './stars.js';
 
-function renderGames() {
+export function renderGames() {
+  const cardsContainer = document.getElementById("cardsContainer");
   cardsContainer.innerHTML = "";
+
   games.forEach((game, index) => {
     const card = document.createElement("div");
     card.className = "card";
@@ -88,13 +78,8 @@ function renderGames() {
   updateStats();
 }
 
-function updateStarDisplay(container, rating) {
-  container.querySelectorAll("span").forEach((star, idx) => {
-    star.classList.toggle("active", idx < rating);
-  });
-}
-
-function updateStats() {
+export function updateStats() {
+  const doneCountEl = document.getElementById("doneCount");
   const done = games.filter(g => g.status === "done").length;
   doneCountEl.textContent = done;
 }
