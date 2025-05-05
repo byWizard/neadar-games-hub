@@ -170,11 +170,64 @@ authBtn.addEventListener("click", () => {
 });
 
 // Слушатель состояния пользователя
+const mainContent = document.querySelector("body > header, body > section, body > div.backup-section, body > .search-filter, body > .stats");
+const authOnlyOverlay = document.getElementById("authOnlyOverlay");
+const authRequiredLoginBtn = document.getElementById("authRequiredLoginBtn");
+
+function toggleAuthUI(isAuthenticated) {
+  if (isAuthenticated) {
+    // Скрываем оверлей
+    authOnlyOverlay.style.display = "none";
+  } else {
+    // Показываем оверлей
+    authOnlyOverlay.style.display = "flex";
+  }
+}
+
+authRequiredLoginBtn.addEventListener("click", () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).catch(err => {
+    alert("Ошибка входа: " + err.message);
+  });
+});
+
 auth.onAuthStateChanged(async (user) => {
   if (user) {
     currentUser = user;
     authBtn.textContent = "Выйти";
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
+    
+    // Загружаем данные
+    let firebaseData = [];
+    try {
+      const snapshot = await database.ref(`users/${currentUser.uid}`).once("value");
+      const data = snapshot.val();
+      firebaseData = data?.games || [];
+    } catch (error) {
+      console.error("Ошибка при загрузке данных из Firebase:", error);
+    }
+
+    // Если Firebase есть — используем его
+    const localData = JSON.parse(localStorage.getItem("games")) || [];
+    games = firebaseData.length > 0 ? firebaseData : localData;
+
+    localStorage.setItem("games", JSON.stringify(games));
+    renderGames();
+    toggleAuthUI(true);
+
+  } else {
+    // === КОГДА ПОЛЬЗОВАТЕЛЬ ВЫШЕЛ ===
+    currentUser = null;
+    authBtn.textContent = "Войти через Google";
+    userStatus.textContent = "Вы не вошли";
+
+    // ❗ Сохраняем локально, но очищаем интерфейс
+    localStorage.setItem("games", JSON.stringify(games)); // можно убрать, если хочешь
+    games = []; // Очищаем список
+    renderGames(); // Обновляем UI
+    toggleAuthUI(false);
+  }
+});
 
     // Грузим данные из Firebase
     let firebaseData = [];
