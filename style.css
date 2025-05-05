@@ -1,4 +1,3 @@
-/* Цвета */
 :root {
   --bg-color: #111;
   --text-color: #eee;
@@ -85,6 +84,34 @@ header p {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.backup-section {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+#exportBtn,
+#importInput + label {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin: 0 0.5rem;
+  display: inline-block;
+}
+
+#exportBtn:hover,
+#importInput + label:hover {
+  background-color: #357ABD;
+}
+
+#importInput {
+  display: none;
 }
 
 .add-game {
@@ -298,35 +325,4 @@ footer a:hover {
 
 .search-results li:last-child {
   border-bottom: none;
-}
-
-/* Экспорт импорт */
-
-.backup-section {
-  text-align: center;
-  margin: 2rem 0;
-}
-
-#exportBtn,
-#importInput + label {
-  background-color: var(--accent-color);
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-  margin: 0 0.5rem;
-  display: inline-block;
-  text-decoration: none;
-}
-
-#exportBtn:hover,
-#importInput + label:hover {
-  background-color: #357ABD;
-}
-
-#importInput {
-  display: none;
 }
