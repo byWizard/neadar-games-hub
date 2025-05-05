@@ -385,39 +385,6 @@ window.addEventListener("mousemove", function(e) {
   mouse.y = e.clientY;
 });
 
-// Слушатель клика по фону (взрыв частиц)
-canvas.addEventListener("click", function(e) {
-  const rect = canvas.getBoundingClientRect();
-  const clickX = e.clientX - rect.left;
-  const clickY = e.clientY - rect.top;
-
-  console.log("Клик получен!", clickX, clickY); // Отладка
-
-  for (let i = 0; i < 20; i++) {
-    const particle = new Particle();
-
-    particle.x = clickX;
-    particle.y = clickY;
-
-    const angle = Math.random() * Math.PI * 2;
-    const speed = Math.random() * 1.5 + 0.5;
-
-    particle.vx = Math.cos(angle) * speed;
-    particle.vy = Math.sin(angle) * speed;
-
-    // Яркость и размер на короткое время
-    particle.radius = Math.random() * 3 + 2;
-    particle.alpha = 1;
-
-    setTimeout(() => {
-      particle.radius = Math.random() * 2 + 1;
-      particle.alpha = Math.random() * 0.5 + 0.2;
-    }, 100);
-
-    particles.push(particle);
-  }
-});
-
 class Particle {
   constructor() {
     this.reset();
@@ -450,13 +417,13 @@ class Particle {
         const force = (mouse.radius - distance) / mouse.radius;
         const angle = Math.atan2(dy, dx);
 
-        // Усиленное притяжение
+        // Притяжение к курсору
         this.vx += -Math.cos(angle) * force * 0.3;
         this.vy += -Math.sin(angle) * force * 0.3;
       }
     }
 
-    // Движение
+    // Обычное движение
     this.x += this.vx;
     this.y += this.vy;
 
