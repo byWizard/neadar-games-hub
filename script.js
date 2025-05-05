@@ -402,7 +402,7 @@ class Particle {
   }
 
   draw() {
-    const scale = Math.sin(this.pulse) * 0.3 + 1.3; // Мягкая пульсация от 1 до 1.6
+    const scale = Math.sin(this.pulse) * 0.3 + 1.3;
 
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius * scale, 0, Math.PI * 2);
