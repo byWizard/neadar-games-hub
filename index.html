@@ -29,6 +29,8 @@
   <section class="add-game">
     <h2>Добавить новую игру</h2>
     <form id="addGameForm">
+      <input type="text" id="gameSearch" placeholder="Поиск по названию игры..." />
+      <ul id="searchResults" class="search-results"></ul>
       <input type="text" id="gameTitle" placeholder="Название игры" required />
       <input type="url" id="gameImage" placeholder="Ссылка на картинку" required />
       <textarea id="gameDescription" placeholder="Описание"></textarea>
