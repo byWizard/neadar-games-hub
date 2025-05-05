@@ -60,7 +60,7 @@ function setToCache(query, data, ttl = 3600000) {
   saveCacheToStorage();
 }
 
-// RAWG API
+// RAWG API — ЗАМЕНИ ЭТО НА СВОЙ КЛЮЧ
 const RAWG_API_KEY = "48b79844fcc44af7860a5fa89de88ca8";
 
 async function searchGame(query) {
@@ -88,7 +88,7 @@ let debounceTimer;
 
 gameSearchInput.addEventListener("input", e => {
   const query = e.target.value.trim();
-  if (query.length < 3) {
+  if (query.length < 2) {
     searchResults.innerHTML = "";
     return;
   }
@@ -111,10 +111,15 @@ function renderSearchResults(results) {
 
   results.slice(0, 5).forEach(game => {
     const li = document.createElement("li");
-    li.textContent = `${game.name}`;
-    li.dataset.image = game.background_image;
-    li.dataset.description = game.short_description || "Описание отсутствует";
-    li.dataset.name = game.name;
+    li.innerHTML = `
+      <div style="display: flex; align-items: center;">
+        <img src="${game.background_image}" alt="${game.name}" width="40" style="margin-right: 10px; border-radius: 4px;">
+        <div>
+          <strong>${game.name}</strong><br>
+          <small>${game.short_description || 'Описание отсутствует'}</small>
+        </div>
+      </div>
+    `;
 
     li.addEventListener("click", () => {
       gameTitle.value = game.name;
@@ -131,14 +136,9 @@ function renderSearchResults(results) {
 // Тема
 function setTheme(theme) {
   document.body.classList.remove("dark-theme", "light-theme");
-  document.body.classList.add(theme + "-theme");
+  document.body.classList.add(`${theme}-theme`);
 
-  if (theme === "dark") {
-    themeToggle.textContent = "🌙 Переключить тему";
-  } else {
-    themeToggle.textContent = "☀️ Переключить тему";
-  }
-
+  themeToggle.textContent = theme === "dark" ? "🌙 Переключить тему" : "☀️ Переключить тему";
   localStorage.setItem("theme", theme);
 }
 
