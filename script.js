@@ -365,12 +365,25 @@ const ctx = canvas.getContext("2d");
 let width, height;
 let particles = [];
 
+// Переменные для мыши
+const mouse = {
+  x: null,
+  y: null,
+  radius: 100 // Радиус действия мыши
+};
+
 function resizeCanvas() {
   width = window.innerWidth;
   height = window.innerHeight;
   canvas.width = width;
   canvas.height = height;
 }
+
+// Слушатель движения мыши
+window.addEventListener("mousemove", function(e) {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
 
 class Particle {
   constructor() {
@@ -394,16 +407,34 @@ class Particle {
   }
 
   update() {
+    // Реакция на мышь
+    if (mouse.x !== null && mouse.y !== null) {
+      const dx = this.x - mouse.x;
+      const dy = this.y - mouse.y;
+      const distance = Math.hypot(dx, dy);
+
+      if (distance < mouse.radius) {
+        const force = (mouse.radius - distance) / mouse.radius;
+        const angle = Math.atan2(dy, dx);
+
+        // Притяжение к курсору
+        this.vx += -Math.cos(angle) * force * 0.1;
+        this.vy += -Math.sin(angle) * force * 0.1;
+      }
+    }
+
+    // Обычное движение
     this.x += this.vx;
     this.y += this.vy;
 
+    // Телепортация при выходе за экран
     if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
       this.reset();
     }
   }
 }
 
-function initParticles(count = 100) {
+function initParticles(count = 150) {
   particles = [];
   for (let i = 0; i < count; i++) {
     particles.push(new Particle());
@@ -432,6 +463,14 @@ function animate() {
         ctx.stroke();
       }
     }
+  }
+
+  // (Необязательно) Показываем зону действия мыши
+  if (mouse.x && mouse.y) {
+    ctx.beginPath();
+    ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    ctx.stroke();
   }
 
   requestAnimationFrame(animate);
