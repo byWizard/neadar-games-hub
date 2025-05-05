@@ -12,13 +12,14 @@ let currentUser = null;
 
 // Инициализация Firebase
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "your-project-id.firebaseapp.com",
-  databaseURL: "https://your-project-id.firebaseio.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project-id.appspot.com",
-  messagingSenderId: "your-sender-id",
-  appId: "your-app-id"
+  apiKey: "AIzaSyDhMfbhd7emAXNKDexXxaCxZ0k2DfkRcVg",
+  authDomain: "my-games-app-hub.firebaseapp.com",
+  databaseURL: "https://my-games-app-hub-default-rtdb.firebaseio.com",
+  projectId: "my-games-app-hub",
+  storageBucket: "my-games-app-hub.firebasestorage.app",
+  messagingSenderId: "251367004030",
+  appId: "1:251367004030:web:2b1be1b1c76ee80c0d052f",
+  measurementId: "G-ZDJ96FX596"
 };
 
 firebase.initializeApp(firebaseConfig);
