@@ -10,6 +10,7 @@ const filterSelect = document.getElementById("filterSelect");
 const doneCountEl = document.getElementById("doneCount");
 const authBtn = document.getElementById("authBtn");
 const userStatus = document.getElementById("userStatus");
+const themeToggle = document.getElementById("themeToggle");
 
 let games = [];
 let currentUser = null;
@@ -51,7 +52,7 @@ function getFromCache(query) {
   return null;
 }
 
-function setToCache(query, data, ttl = 3600000) { // 1 час
+function setToCache(query, data, ttl = 3600000) {
   searchCache[query] = {
     data,
     expiresAt: Date.now() + ttl
@@ -60,7 +61,7 @@ function setToCache(query, data, ttl = 3600000) { // 1 час
 }
 
 // RAWG API
-const RAWG_API_KEY = "48b79844fcc44af7860a5fa89de88ca8";
+const RAWG_API_KEY = "ВАШ_КЛЮЧ_ЗДЕСЬ";
 
 async function searchGame(query) {
   const cached = getFromCache(query);
@@ -127,6 +128,30 @@ function renderSearchResults(results) {
   });
 }
 
+// Тема
+themeToggle.addEventListener("click", () => {
+  const isDark = document.body.classList.contains("dark-theme");
+  if (isDark) {
+    document.body.classList.remove("dark-theme");
+    document.body.classList.add("light-theme");
+    themeToggle.textContent = "☀️ Переключить тему";
+  } else {
+    document.body.classList.remove("light-theme");
+    document.body.classList.add("dark-theme");
+    themeToggle.textContent = "🌙 Переключить тему";
+  }
+  localStorage.setItem("theme", isDark ? "light" : "dark");
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  const savedTheme = localStorage.getItem("theme") || "dark";
+  if (savedTheme === "light") {
+    document.body.classList.remove("dark-theme");
+    document.body.classList.add("light-theme");
+    themeToggle.textContent = "☀️ Переключить тему";
+  }
+});
+
 // Авторизация
 authBtn.addEventListener("click", () => {
   if (currentUser) {
@@ -155,7 +180,7 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-// Загрузка данных из Firebase
+// Загрузка данных
 function loadUserData() {
   database.ref(`users/${currentUser.uid}`).on("value", snapshot => {
     const data = snapshot.val();
@@ -164,7 +189,7 @@ function loadUserData() {
   });
 }
 
-// Сохранение данных в Firebase
+// Сохранение данных
 function saveUserData() {
   database.ref(`users/${currentUser.uid}`).set({ games });
 }
@@ -203,8 +228,8 @@ function renderGames() {
     card.innerHTML = `
       <img src="${game.image}" alt="${game.title}">
       <h2>${game.title}</h2>
-      <span class="status ${game.status === "done" ? "done" : "want"}">${game.status === "done" ? "Пройдена" : "Хочу пройти"}</span>
-      <div class="stars" data-rating="${game.rating || 0}"></div>
+      <span class="status want">Хочу пройти</span>
+      <div class="stars" data-rating="0"></div>
       <small>Добавлено</small>
       <textarea class="description">${game.description || ""}</textarea>
       <button class="delete-btn">🗑️ Удалить</button>
@@ -216,18 +241,17 @@ function renderGames() {
       const star = document.createElement("span");
       star.textContent = "★";
       star.dataset.rating = i;
-      if (i <= game.rating) star.classList.add("active");
       starsEl.appendChild(star);
     }
+
+    updateStarDisplay(starsEl, game.rating || 0);
 
     starsEl.addEventListener("click", e => {
       if (e.target.tagName === "SPAN") {
         const rating = parseInt(e.target.dataset.rating);
         game.rating = rating;
         starsEl.dataset.rating = rating;
-        starsEl.querySelectorAll("span").forEach((star, idx) => {
-          star.classList.toggle("active", idx < rating);
-        });
+        updateStarDisplay(starsEl, rating);
         saveData();
       }
     });
@@ -258,13 +282,25 @@ function renderGames() {
       renderGames();
     });
 
+    // Показываем статус
+    if (game.status === "done") {
+      statusEl.className = "status done";
+      statusEl.textContent = "Пройдена";
+    }
+
+    // Добавляем карточку
     cardsContainer.appendChild(card);
   });
 
   updateStats();
 }
 
-// Сохранение данных
+function updateStarDisplay(container, rating) {
+  container.querySelectorAll("span").forEach((star, idx) => {
+    star.classList.toggle("active", idx < rating);
+  });
+}
+
 function updateStats() {
   const done = games.filter(g => g.status === "done").length;
   doneCountEl.textContent = done;
