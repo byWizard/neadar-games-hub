@@ -338,3 +338,10 @@ footer a:hover {
   z-index: -1;
   pointer-events: none;
 }
+
+body {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
