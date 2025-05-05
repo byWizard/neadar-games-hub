@@ -300,18 +300,33 @@ footer a:hover {
   border-bottom: none;
 }
 
+/* Экспорт импорт */
+
 .backup-section {
   text-align: center;
   margin: 2rem 0;
 }
 
-.backup-section input[type="file"] {
-  display: none;
+#exportBtn,
+#importInput + label {
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin: 0 0.5rem;
+  display: inline-block;
+  text-decoration: none;
 }
 
-.backup-section label {
-  display: inline-block;
-  margin-left: 10px;
-  cursor: pointer;
-  color: var(--accent-color);
+#exportBtn:hover,
+#importInput + label:hover {
+  background-color: #357ABD;
+}
+
+#importInput {
+  display: none;
 }
