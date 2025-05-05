@@ -434,7 +434,7 @@ class Particle {
   }
 }
 
-function initParticles(count = 150) {
+function initParticles(count = 200) {
   particles = [];
   for (let i = 0; i < count; i++) {
     particles.push(new Particle());
