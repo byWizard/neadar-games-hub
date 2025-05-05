@@ -12,11 +12,12 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 </head>
-<body>
+<body class="dark-theme">
 
   <header>
     <h1>Мои пройденные игры</h1>
     <p>Игры, которые я полностью прошёл или планирую пройти</p>
+    <button id="themeToggle">🌙 Переключить тему</button>
   </header>
 
   <!-- Авторизация -->
@@ -30,6 +31,7 @@
     <h2>Добавить новую игру</h2>
     <form id="addGameForm">
       <input type="text" id="gameSearch" placeholder="Поиск по названию игры..." />
+      <small class="search-hint">Пишите название → здесь появятся варианты</small>
       <ul id="searchResults" class="search-results"></ul>
       <input type="text" id="gameTitle" placeholder="Название игры" required />
       <input type="url" id="gameImage" placeholder="Ссылка на картинку" required />
