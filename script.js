@@ -218,9 +218,9 @@ function applyFilters() {
   const term = searchInput.value.toLowerCase();
   const filter = filterSelect.value;
   const filtered = games.filter(g =>
-    g.title.toLowerCase().includes(term) &&
-    (filter === "all" || g.status === filter)
-  );
+  g.title.toLowerCase().includes(term) &&
+  (filter === "all" || g.status === filter)
+);
   renderFilteredGames(filtered);
 }
 
