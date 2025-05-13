@@ -473,15 +473,15 @@ footer strong.version-tag {
   /* Первый слой (далёкий) — затемнённый фон */
   background-image: url('https://i.ibb.co/wNgc7wnx/135750-zvezda-kosmicheskoe-prostranstvo-elektrik-nebo-mlechnyj-put-3840x2160.jpg'); /* Космос */
   animation: parallaxMove 20s ease-in-out infinite alternate;
-  filter: brightness(0.3); /* Затемнение */
-  opacity: 0.4;
+  filter: brightness(0.2); /* Затемнение */
+  opacity: 0.5;
 }
 
 .layer-2 {
   /* Второй слой (ближе к камере) — чуть прозрачный и быстрее двигается */
   background-image: url('https://ltdfoto.ru/images/2025/05/13/img3.akspic.ru-atmosfera-mir-astronomicheskij_obekt-nauka-elektrik-10000x5625.jpg'); /* Метеориты */
   animation: parallaxMove 10s ease-in-out infinite alternate;
-  opacity: 0.3;
+  opacity: 0.2;
   z-index: -1;
 }
 
