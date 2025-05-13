@@ -493,20 +493,20 @@ footer strong.version-tag {
 /* === Кнопка переключения параллакса === */
 #toggleParallaxBtn {
   position: absolute;
-  top: 2rem; /* Было 1rem → теперь чуть ниже */
-  right: 7rem; /* Позиция справа — можно менять под нужный отступ */
+  top: 4rem; /* Было 1rem → теперь чуть ниже */
+  right: 5rem; /* Позиция справа — можно менять под нужный отступ */
   background: none;
   border: 1px solid var(--accent-color);
   color: var(--accent-color);
   padding: 0.3rem 0.6rem; /* Уменьшили внутренний отступ */
   border-radius: 5px;
   cursor: pointer;
-  z-index: 9; /* Теперь будет под кнопкой темы */
+  z-index: 8; /* Теперь будет под кнопкой темы */
   transition: all 0.3s ease;
 }
 
 #toggleParallaxBtn .icon-galaxy {
-  font-size: 1.1rem; /* Уменьшили размер иконки */
+  font-size: 1.0rem; /* Уменьшили размер иконки */
   vertical-align: middle;
 }
 
