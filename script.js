@@ -519,3 +519,84 @@ function updateParticleColor(theme) {
 // === Инициализация ===
 createParticles();
 animateParticles();
+
+// === Объект с пресетами фонов ===
+const backgroundPresets = {
+  cosmic: {
+    layer1: "https://images.unsplash.com/photo-1506744038136-46273834b3fb ",
+    layer2: "https://images.unsplash.com/photo-1508610048659-a06b669d332f "
+  },
+  anime: {
+    layer1: "https://images.unsplash.com/photo-1518730046604-0e2fd9b2398e50 ",
+    layer2: "https://images.unsplash.com/photo-1518730046604-0e2fd9b2398e50 "
+  },
+  minimal: {
+    layer1: null,
+    layer2: null
+  }
+};
+
+// === DOM Elements ===
+const bgMenuToggle = document.getElementById("bgMenuToggle");
+const bgPresetList = document.getElementById("bgPresetList");
+
+// === Переключение меню ===
+bgMenuToggle.addEventListener("click", () => {
+  bgPresetList.classList.toggle("open");
+});
+
+// === Закрытие при клике вне меню ===
+document.addEventListener("click", (e) => {
+  if (!bgMenuToggle.contains(e.target) && !bgPresetList.contains(e.target)) {
+    bgPresetList.classList.remove("open");
+  }
+});
+
+// === Применение выбранного фона ===
+function setBackground(preset) {
+  const layers = backgroundPresets[preset];
+  const layer1 = document.querySelector(".layer-1");
+  const layer2 = document.querySelector(".layer-2");
+
+  if (layer1 && layer2) {
+    if (layers.layer1) {
+      layer1.style.display = "block";
+      layer1.style.backgroundImage = `url('${layers.layer1}')`;
+    } else {
+      layer1.style.display = "none";
+    }
+
+    if (layers.layer2) {
+      layer2.style.display = "block";
+      layer2.style.backgroundImage = `url('${layers.layer2}')`;
+    } else {
+      layer2.style.display = "none";
+    }
+  }
+
+  // Сохраняем в localStorage
+  localStorage.setItem("bgPreset", preset);
+
+  // Меняем цвет частиц под стиль
+  if (preset === "anime") {
+    setParticleColor("255, 180, 255"); // Розовые частицы для аниме
+  } else {
+    const currentTheme = localStorage.getItem("theme") || "dark";
+    updateParticleColor(currentTheme); // Стандартный цвет под тему
+  }
+}
+
+// === Обработчики кликов по пунктам меню ===
+bgPresetList.querySelectorAll("button[data-bg]").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+    const preset = e.target.dataset.bg;
+    setBackground(preset);
+    bgPresetList.classList.remove("open");
+  });
+});
+
+// === Автозагрузка сохранённого фона ===
+window.addEventListener("DOMContentLoaded", () => {
+  const savedPreset = localStorage.getItem("bgPreset") || "cosmic";
+  setBackground(savedPreset);
+});
