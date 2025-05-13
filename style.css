@@ -457,10 +457,6 @@ footer strong.version-tag {
 }
 
 /* === Параллакс фоны === */
-html, body {
-  overflow: hidden;
-  height: 100%;
-}
 .parallax-bg {
   position: fixed;
   top: 0;
