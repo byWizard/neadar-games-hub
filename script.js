@@ -523,12 +523,12 @@ animateParticles();
 // === Объект с пресетами фонов ===
 const backgroundPresets = {
   cosmic: {
-    layer1: "https://images.unsplash.com/photo-1506744038136-46273834b3fb ",
-    layer2: "https://images.unsplash.com/photo-1508610048659-a06b669d332f "
+    layer1: "https://i.ibb.co/jkJc4Tbq/135763-nochnoe-nebo-atmosfera-astronomicheskij-obekt-galaktika-tumannost-3840x2160.jpg",
+    layer2: "https://i.ibb.co/bjv5H8FP/143309-podzemnye-vody-oblako-atmosfera-nebo-tumannost-7680x4320.jpg"
   },
   anime: {
-    layer1: "https://images.unsplash.com/photo-1518730046604-0e2fd9b2398e50 ",
-    layer2: "https://images.unsplash.com/photo-1518730046604-0e2fd9b2398e50 "
+    layer1: "https://i.ibb.co/nNC3VRzD/img3-akspic-ru-planeta-astronomicheskij-obekt-zemlya-kosmicheskoe-prostranstvo-astronomiya-6458x3625.jpg",
+    layer2: "https://i.ibb.co/nNC3VRzD/img3-akspic-ru-planeta-astronomicheskij-obekt-zemlya-kosmicheskoe-prostranstvo-astronomiya-6458x3625.jpg"
   },
   minimal: {
     layer1: null,
