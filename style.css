@@ -470,18 +470,18 @@ footer strong.version-tag {
 }
 
 .layer-1 {
-  /* Первый слой (далёкий) — затемнённый фон */
-  background-image: url('https://i.ibb.co/wNgc7wnx/135750-zvezda-kosmicheskoe-prostranstvo-elektrik-nebo-mlechnyj-put-3840x2160.jpg'); /* Космос */
-  animation: parallaxMove 20s ease-in-out infinite alternate;
-  filter: brightness(0.6); /* Затемнение */
+  background-image: url('https://i.ibb.co/wNgc7wnx/135750-zvezda-kosmicheskoe-prostranstvo-elektrik-nebo-mlechnyj-put-3840x2160.jpg');
+  animation: parallaxMove 22s ease-in-out infinite alternate;
+  filter: brightness(0.5) contrast(1.1);
   opacity: 0.4;
+  z-index: -2;
 }
 
 .layer-2 {
-  /* Второй слой (ближе к камере) — чуть прозрачный и быстрее двигается */
-  background-image: url('https://i.ibb.co/bjv5H8FP/143309-podzemnye-vody-oblako-atmosfera-nebo-tumannost-7680x4320.jpg'); /* Метеориты */
-  animation: parallaxMove 10s ease-in-out infinite alternate;
-  opacity: 0.7;
+  background-image: url('https://i.ibb.co/bjv5H8FP/143309-podzemnye-vody-oblako-atmosfera-nebo-tumannost-7680x4320.jpg');
+  animation: parallaxMove 17s ease-in-out infinite alternate;
+  filter: brightness(0.7) saturate(1.2);
+  opacity: 0.3;
   z-index: -1;
 }
 
