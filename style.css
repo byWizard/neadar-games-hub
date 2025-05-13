@@ -481,7 +481,7 @@ footer strong.version-tag {
   /* Второй слой (ближе к камере) — чуть прозрачный и быстрее двигается */
   background-image: url('https://ltdfoto.ru/images/2025/05/13/img3.akspic.ru-atmosfera-mir-astronomicheskij_obekt-nauka-elektrik-10000x5625.jpg'); /* Метеориты */
   animation: parallaxMove 6s ease-in-out infinite alternate;
-  opacity: 0.2;
+  opacity: 0.7;
   z-index: -1;
 }
 
