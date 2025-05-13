@@ -510,7 +510,7 @@ toggleParallaxBtn.addEventListener("click", () => {
 // === Цвет частиц под тему ===
 function updateParticleColor(theme) {
   if (theme === "dark") {
-    setParticleColor("255, 255, 255");
+    setParticleColor("0, 150, 255");
   } else {
     setParticleColor("50, 50, 50");
   }
