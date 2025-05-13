@@ -107,28 +107,68 @@ textarea::placeholder {
   background-color: #b8372b;
 }
 
-/* === HUB заголовок - стиль геймпада === */
-.hub-header.gamepad h1 {
-  font-size: 3rem;
-  color: #fff;
-  background: radial-gradient(circle at 10px 10px, #3498db, #2c3e50);
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  display: inline-block;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-  margin-bottom: 0.5rem;
+/* === Minimal HUB Header === */
+.hub-header.minimal {
+  text-align: center;
+  padding: 2rem 1rem 1.5rem;
+  position: relative;
 }
 
-.hub-header .hub-description {
-  font-size: 1rem;
-  color: #ccc;
-  margin-bottom: 1rem;
+.hub-header.minimal h1,
+.hub-header.minimal h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-color);
 }
 
-/* Анимация пульсации текста */
+.hub-header.minimal h1 {
+  background: linear-gradient(90deg, #4a90e2, #7ed321);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: pulse 3s infinite;
+}
+
+.hub-header.minimal h2 {
+  margin-top: 0.3rem;
+  font-size: 1.2rem;
+  color: var(--secondary-text);
+}
+
+.hub-header.minimal p {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--accent-color);
+  opacity: 0.8;
+  letter-spacing: 0.05em;
+}
+
+/* Позиционирование кнопки темы поверх заголовков (справа сверху) */
+.hub-header.minimal #themeToggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.hub-header.minimal #themeToggle:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+/* Мягкая анимация пульсации */
 @keyframes pulse {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.03); }
+  50% { transform: scale(1.02); }
 }
 
 /* === Авторизация === */
