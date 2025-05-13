@@ -455,3 +455,21 @@ footer strong.version-tag {
 #authOnlyOverlay {
   display: none; /* По умолчанию скрыт */
 }
+
+/* Новый заголовок */
+.hub-header.gamepad h1 {
+  font-size: 3rem;
+  color: #fff;
+  background: radial-gradient(circle at 10px 10px, #3498db, #2c3e50);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  display: inline-block;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  margin-bottom: 0.5rem;
+}
+
+.hub-header .hub-description {
+  font-size: 1rem;
+  color: #ccc;
+  margin-bottom: 1rem;
+}
