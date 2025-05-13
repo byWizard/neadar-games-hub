@@ -313,7 +313,13 @@ deleteBtn.addEventListener("click", () => {
 function updateCard(card, game) {
   const statusEl = card.querySelector(".status");
   statusEl.className = `status ${game.status}`;
-  statusEl.textContent = game.status === "done" ? "Пройдена" : "Хочу пройти";
+  statusEl.textContent =
+    game.status === "done"
+      ? "Пройдена"
+      : game.status === "want"
+      ? "Хочу пройти"
+      : "Отложена"; // Текст для нового статуса
+}
 
   const starsEl = card.querySelector(".stars");
   updateStarDisplay(starsEl, game.rating || 0);
