@@ -521,7 +521,7 @@ footer strong.version-tag {
 /* === Меню выбора фона === */
 .background-menu {
   position: absolute;
-  top: 1rem;
+  top: 3rem;
   right: 7rem; /* Рядом с кнопкой темы */
   z-index: 10;
 }
