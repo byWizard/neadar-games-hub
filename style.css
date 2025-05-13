@@ -506,7 +506,7 @@ footer strong.version-tag {
 }
 
 #toggleParallaxBtn .icon-galaxy {
-  font-size: 1.0rem; /* Уменьшили размер иконки */
+  font-size: 0.9rem; /* Уменьшили размер иконки */
   vertical-align: middle;
 }
 
