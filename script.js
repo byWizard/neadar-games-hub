@@ -459,9 +459,6 @@ let isParallaxEnabled = localStorage.getItem("parallaxEnabled") !== "false";
 // Установка начального состояния
 if (!isParallaxEnabled) {
   document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "none");
-  toggleParallaxBtn.textContent = "🖼️ Включить параллакс";
-} else {
-  toggleParallaxBtn.textContent = "🖼️ Отключить параллакс";
 }
 
 toggleParallaxBtn.addEventListener("click", () => {
@@ -471,7 +468,6 @@ toggleParallaxBtn.addEventListener("click", () => {
     el.style.display = isParallaxEnabled ? "block" : "none";
   });
 
-  toggleParallaxBtn.textContent = isParallaxEnabled ? "🖼️ Отключить параллакс" : "🖼️ Включить параллакс";
   localStorage.setItem("parallaxEnabled", isParallaxEnabled);
 });
 
