@@ -107,28 +107,36 @@ textarea::placeholder {
   background-color: #b8372b;
 }
 
-/* === Minimal HUB Header === */
-.hub-header.minimal-flat {
+/* === Заголовок === */
+header {
   text-align: center;
-  padding: 2rem 1rem;
-  position: relative;
+  margin-bottom: 2rem;
 }
 
-.hub-header.minimal-flat h1 {
-  font-size: 2.2rem;
-  font-weight: 600;
-  margin: 0;
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
   background: linear-gradient(90deg, #4a90e2, #7ed321);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: pulse 3s infinite;
 }
 
-.hub-header.minimal-flat p {
-  margin-top: 0.5rem;
-  font-size: 0.95rem;
+header p {
+  font-size: 1rem;
   color: var(--secondary-text);
-  letter-spacing: 1px;
+}
+
+#themeToggle {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10;
 }
 
 /* === Авторизация === */
