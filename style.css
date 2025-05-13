@@ -470,10 +470,10 @@ footer strong.version-tag {
 }
 
 .layer-1 {
-  background-image: url('https://i.ibb.co/wNgc7wnx/135750-zvezda-kosmicheskoe-prostranstvo-elektrik-nebo-mlechnyj-put-3840x2160.jpg');
+  background-image: url('https://i.ibb.co/jkJc4Tbq/135763-nochnoe-nebo-atmosfera-astronomicheskij-obekt-galaktika-tumannost-3840x2160.jpg');
   animation: parallaxMove 22s ease-in-out infinite alternate;
   filter: brightness(0.5) contrast(1.1);
-  opacity: 0.4;
+  opacity: 0.3;
   z-index: -2;
 }
 
@@ -509,7 +509,7 @@ footer strong.version-tag {
 }
 
 #toggleParallaxBtn .icon-galaxy {
-  font-size: 0.9rem; /* Уменьшили размер иконки */
+  font-size: 0.8rem; /* Уменьшили размер иконки */
   vertical-align: middle;
 }
 
