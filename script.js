@@ -429,7 +429,7 @@ class Particle {
   }
 }
 
-function createParticles(num = 190) {
+function createParticles(num = 160) {
   particles = [];
   for (let i = 0; i < num; i++) {
     particles.push(new Particle());
