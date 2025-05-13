@@ -452,6 +452,29 @@ function animateParticles() {
     p.draw();
   });
 
+// === Переключение параллакса ===
+const toggleParallaxBtn = document.getElementById("toggleParallaxBtn");
+let isParallaxEnabled = localStorage.getItem("parallaxEnabled") !== "false";
+
+// Установка начального состояния
+if (!isParallaxEnabled) {
+  document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "none");
+  toggleParallaxBtn.textContent = "🖼️ Включить параллакс";
+} else {
+  toggleParallaxBtn.textContent = "🖼️ Отключить параллакс";
+}
+
+toggleParallaxBtn.addEventListener("click", () => {
+  isParallaxEnabled = !isParallaxEnabled;
+
+  document.querySelectorAll(".parallax-bg").forEach(el => {
+    el.style.display = isParallaxEnabled ? "block" : "none";
+  });
+
+  toggleParallaxBtn.textContent = isParallaxEnabled ? "🖼️ Отключить параллакс" : "🖼️ Включить параллакс";
+  localStorage.setItem("parallaxEnabled", isParallaxEnabled);
+});
+
   // Линии между частицами
   for (let i = 0; i < particles.length; i++) {
     for (let j = i + 1; j < particles.length; j++) {
