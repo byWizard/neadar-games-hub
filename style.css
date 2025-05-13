@@ -292,6 +292,11 @@ header p {
   color: white;
 }
 
+.status.postponed {
+  background-color: #e74c3c; /* Красный цвет */
+  color: white;
+}
+
 .status.want {
   background-color: var(--accent-color);
   color: white;
