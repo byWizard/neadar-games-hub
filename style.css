@@ -456,18 +456,30 @@ footer strong.version-tag {
   display: none; /* По умолчанию скрыт */
 }
 
+/* Паралакс фон 2х */
 .parallax-bg {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('https://ltdfoto.ru/images/2025/05/13/img3.akspic.ru-atmosfera-mir-astronomicheskij_obekt-nauka-elektrik-10000x5625.jpg'); /* Пример: космический фон */
   background-size: cover;
   background-position: center;
   z-index: -2;
   will-change: transform;
-  animation: parallaxMove 5s ease-in-out infinite alternate;
+}
+
+.layer-1 {
+  background-image: url('https://i.ibb.co/wNgc7wnx/135750-zvezda-kosmicheskoe-prostranstvo-elektrik-nebo-mlechnyj-put-3840x2160.jpg'); /* Дальний фон */
+  animation: parallaxMove 15s ease-in-out infinite alternate;
+  opacity: 0.4;
+}
+
+.layer-2 {
+  background-image: url('https://ltdfoto.ru/images/2025/05/13/img3.akspic.ru-atmosfera-mir-astronomicheskij_obekt-nauka-elektrik-10000x5625.jpg'); /* Ближний фон */
+  animation: parallaxMove 8s ease-in-out infinite alternate;
+  opacity: 0.3;
+  z-index: -1;
 }
 
 @keyframes parallaxMove {
