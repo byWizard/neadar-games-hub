@@ -319,7 +319,6 @@ function updateCard(card, game) {
       : game.status === "want"
       ? "Хочу пройти"
       : "Отложена"; // Текст для нового статуса
-}
 
   const starsEl = card.querySelector(".stars");
   updateStarDisplay(starsEl, game.rating || 0);
