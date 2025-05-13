@@ -480,8 +480,8 @@ footer strong.version-tag {
 .layer-2 {
   background-image: url('https://i.ibb.co/bjv5H8FP/143309-podzemnye-vody-oblako-atmosfera-nebo-tumannost-7680x4320.jpg');
   animation: parallaxMove 17s ease-in-out infinite alternate;
-  filter: brightness(0.7) saturate(1.2);
-  opacity: 0.3;
+  filter: brightness(0.8) saturate(1.2);
+  opacity: 0.5;
   z-index: -1;
 }
 
