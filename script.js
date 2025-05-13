@@ -527,7 +527,7 @@ const backgroundPresets = {
     layer2: "https://i.ibb.co/bjv5H8FP/143309-podzemnye-vody-oblako-atmosfera-nebo-tumannost-7680x4320.jpg"
   },
   anime: {
-    layer1: "",
+    layer1: "https://i.ibb.co/twqJFRft/img1-akspic-ru-temnota-elektrik-nochnoe-nebo-astronomicheskij-obekt-sinij-6000x4000.jpg",
     layer2: "https://i.ibb.co/TxZ8DG5q/img3-akspic-ru-anime-v-dayz-anime-multik-ryomen-ego-nogi-yudzi-itadori-5120x2880.jpg"
   },
   minimal: {
