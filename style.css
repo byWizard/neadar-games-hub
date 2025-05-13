@@ -472,7 +472,7 @@ footer strong.version-tag {
 .layer-1 {
   /* Первый слой (далёкий) — затемнённый фон */
   background-image: url('https://i.ibb.co/wNgc7wnx/135750-zvezda-kosmicheskoe-prostranstvo-elektrik-nebo-mlechnyj-put-3840x2160.jpg'); /* Космос */
-  animation: parallaxMove 15s ease-in-out infinite alternate;
+  animation: parallaxMove 20s ease-in-out infinite alternate;
   filter: brightness(0.6); /* Затемнение */
   opacity: 0.4;
 }
@@ -480,14 +480,17 @@ footer strong.version-tag {
 .layer-2 {
   /* Второй слой (ближе к камере) — чуть прозрачный и быстрее двигается */
   background-image: url('https://i.ibb.co/bjv5H8FP/143309-podzemnye-vody-oblako-atmosfera-nebo-tumannost-7680x4320.jpg'); /* Метеориты */
-  animation: parallaxMove 8s ease-in-out infinite alternate;
+  animation: parallaxMove 10s ease-in-out infinite alternate;
   opacity: 0.7;
   z-index: -1;
 }
 
 @keyframes parallaxMove {
-  from { transform: translateY(0); }
-  to { transform: translateY(-20px); }
+  0%   { transform: translate(0, 0) rotate(0deg); }
+  25%  { transform: translate(-10px, -10px) rotate(-0.5deg); }
+  50%  { transform: translate(10px, -20px) rotate(0.5deg); }
+  75%  { transform: translate(-5px, -15px) rotate(-0.2deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
 }
 
 /* === Кнопка переключения параллакса === */
