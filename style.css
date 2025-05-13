@@ -473,8 +473,8 @@ footer strong.version-tag {
   /* Первый слой (далёкий) — затемнённый фон */
   background-image: url('https://i.ibb.co/wNgc7wnx/135750-zvezda-kosmicheskoe-prostranstvo-elektrik-nebo-mlechnyj-put-3840x2160.jpg'); /* Космос */
   animation: parallaxMove 14s ease-in-out infinite alternate;
-  filter: brightness(0.4); /* Затемнение */
-  opacity: 0.4;
+  filter: brightness(0.6); /* Затемнение */
+  opacity: 0.3;
 }
 
 .layer-2 {
