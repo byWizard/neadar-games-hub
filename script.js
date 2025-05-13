@@ -527,8 +527,8 @@ const backgroundPresets = {
     layer2: "https://i.ibb.co/bjv5H8FP/143309-podzemnye-vody-oblako-atmosfera-nebo-tumannost-7680x4320.jpg"
   },
   anime: {
-    layer1: "https://i.ibb.co/nNC3VRzD/img3-akspic-ru-planeta-astronomicheskij-obekt-zemlya-kosmicheskoe-prostranstvo-astronomiya-6458x3625.jpg",
-    layer2: "https://i.ibb.co/nNC3VRzD/img3-akspic-ru-planeta-astronomicheskij-obekt-zemlya-kosmicheskoe-prostranstvo-astronomiya-6458x3625.jpg"
+    layer1: "https://i.ibb.co/YF9WyJBZ/img1-akspic-ru-anime-odin-udar-chelovek-prefektura-sajtama-chernyj-i-belyj-dizajn-7680x4320.png",
+    layer2: "https://i.ibb.co/TxZ8DG5q/img3-akspic-ru-anime-v-dayz-anime-multik-ryomen-ego-nogi-yudzi-itadori-5120x2880.jpg"
   },
   minimal: {
     layer1: null,
