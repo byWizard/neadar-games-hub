@@ -266,10 +266,16 @@ function renderFilteredGames(filteredGames) {
       // Статус
 const statusEl = card.querySelector(".status");
 statusEl.addEventListener("click", () => {
-  game.status = game.status === "done" ? "want" : "done";
+  if (game.status === "done") {
+    game.status = "want";
+  } else if (game.status === "want") {
+    game.status = "postponed"; // Переход к новому статусу
+  } else {
+    game.status = "done"; // Цикл из "postponed" -> "done"
+  }
   saveData();
-  updateCard(card, game);
-  updateStats(); // ✅ Добавили обновление счётчика
+  updateCard(card, game); 
+  updateStats(); 
 });
 
       // Описание
