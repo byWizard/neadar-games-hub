@@ -489,3 +489,28 @@ footer strong.version-tag {
   from { transform: translateY(0); }
   to { transform: translateY(-20px); }
 }
+
+/* === Кнопка переключения параллакса === */
+#toggleParallaxBtn {
+  position: absolute;
+  top: 1rem;
+  right: 7rem; /* Чтобы была рядом с темой */
+  background: none;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+#toggleParallaxBtn .icon-galaxy {
+  font-size: 1.2rem;
+  vertical-align: middle;
+}
+
+#toggleParallaxBtn:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
