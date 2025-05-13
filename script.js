@@ -235,9 +235,15 @@ function renderFilteredGames(filteredGames) {
       card.className = "card";
       card.setAttribute("data-id", game.id);
       card.innerHTML = `
-        <img src="${game.image}" alt="${game.title}">
-        <h2>${game.title}</h2>
-        <span class="status ${game.status}">${game.status === "done" ? "Пройдена" : "Хочу пройти"}</span>
+  <img src="${game.image}" alt="${game.title}">
+  <h2>${game.title}</h2>
+  <span class="status ${game.status}">${
+    game.status === "done"
+      ? "Пройдена"
+      : game.status === "want"
+        ? "Хочу пройти"
+        : "Отложена"
+  }</span>
         <div class="stars" data-rating="${game.rating || 0}"></div>
         <small>Добавлено</small>
         <textarea class="description">${game.description || ""}</textarea>
