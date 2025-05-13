@@ -496,7 +496,7 @@ footer strong.version-tag {
 /* === Кнопка переключения параллакса === */
 #toggleParallaxBtn {
   position: absolute;
-  top: 3rem; /* Было 1rem → теперь чуть ниже */
+  top: 3.2rem; /* Было 1rem → теперь чуть ниже */
   right: 1rem; /* Позиция справа — можно менять под нужный отступ */
   background: none;
   border: 1px solid var(--accent-color);
@@ -521,8 +521,8 @@ footer strong.version-tag {
 /* === Меню выбора фона === */
 .background-menu {
   position: absolute;
-  top: 3rem;
-  right: 7rem; /* Рядом с кнопкой темы */
+  top: 3.2rem;
+  right: 5rem; /* Рядом с кнопкой темы */
   z-index: 10;
 }
 
