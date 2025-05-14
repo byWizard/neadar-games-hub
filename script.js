@@ -452,6 +452,22 @@ function animateParticles() {
     p.draw();
   });
 
+// === Фонарик ===
+const nightOverlay = document.getElementById("night-overlay");
+
+document.addEventListener("mousemove", (e) => {
+  const x = e.clientX;
+  const y = e.clientY;
+
+  nightOverlay.style.background = `
+    radial-gradient(
+      circle at ${x}px ${y}px,
+      rgba(0, 0, 0, 0) 50px,
+      rgba(0, 0, 0, 0.95) 200px
+    )
+  `;
+});
+
 // === Переключение анимации частиц через кнопку ===
 const toggleParallaxBtn = document.getElementById("toggleParallaxBtn");
 const canvas = document.getElementById("particles");
