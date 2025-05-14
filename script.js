@@ -540,6 +540,14 @@ const backgroundPresets = {
     layer1: "https://i.ibb.co/twqJFRft/img1-akspic-ru-temnota-elektrik-nochnoe-nebo-astronomicheskij-obekt-sinij-6000x4000.jpg",
     layer2: "https://i.ibb.co/TxZ8DG5q/img3-akspic-ru-anime-v-dayz-anime-multik-ryomen-ego-nogi-yudzi-itadori-5120x2880.jpg"
   },
+  nature: { // например, природа
+    layer1: "https://picsum.photos/id/1015/1920/1080 ",
+    layer2: "https://picsum.photos/id/1016/1920/1080 "
+  },
+  cyberpunk: { // например, киберпанк
+    layer1: "https://picsum.photos/id/1025/1920/1080 ",
+    layer2: "https://picsum.photos/id/1027/1920/1080 "
+  },
   minimal: {
     layer1: null,
     layer2: null
