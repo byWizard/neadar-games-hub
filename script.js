@@ -615,27 +615,51 @@ function setBackground(preset) {
   localStorage.setItem("bgPreset", preset);
 
   // Режим "ночь с фонариком"
-  if (preset === "night") {
-    setParticleColor("255, 255, 255"); // Белые частицы
-    document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "block");
-    document.getElementById("particles").style.display = "block";
-    nightOverlay.style.display = "block"; // Только над фоном
+function setBackground(preset) {
+  const layers = backgroundPresets[preset];
+  const layer1 = document.querySelector(".layer-1");
+  const layer2 = document.querySelector(".layer-2");
 
-  // Режим аниме
+  if (layer1 && layer2) {
+    if (layers.layer1) {
+      layer1.style.display = "block";
+      layer1.style.backgroundImage = `url('${layers.layer1}')`;
+    } else {
+      layer1.style.display = "none";
+    }
+    if (layers.layer2) {
+      layer2.style.display = "block";
+      layer2.style.backgroundImage = `url('${layers.layer2}')`;
+    } else {
+      layer2.style.display = "none";
+    }
+  }
+
+  // Сохраняем в localStorage
+  localStorage.setItem("bgPreset", preset);
+
+  // === Режим "ночь с фонариком" ===
+  if (preset === "night") {
+    setParticleColor("255, 255, 255"); // Белые частицы (если нужно)
+    document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "none"); // Отключаем параллакс
+    document.getElementById("particles").style.display = "none"; // 🔥 Отключаем частицы
+    nightOverlay.style.display = "block"; // Включаем ночной фонарик
+
+  // === Режим аниме ===
   } else if (preset === "anime") {
-    setParticleColor("255, 180, 255");
+    setParticleColor("255, 180, 255"); // Розовые частицы
     document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "block");
     document.getElementById("particles").style.display = "block";
     nightOverlay.style.display = "none";
 
-  // Режим минимал
+  // === Режим минимал ===
   } else if (preset === "minimal") {
-    setParticleColor("255, 255, 255");
+    setParticleColor("255, 255, 255"); // Белые частицы
     document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "none");
     document.getElementById("particles").style.display = "block";
     nightOverlay.style.display = "none";
 
-  // Все остальные пресеты
+  // === Все остальные пресеты ===
   } else {
     const currentTheme = localStorage.getItem("theme") || "dark";
     updateParticleColor(currentTheme);
