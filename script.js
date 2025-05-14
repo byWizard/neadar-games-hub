@@ -454,17 +454,35 @@ function animateParticles() {
   });
 
 // === Фонарик ===
+// === Переменные для ночного режима ===
 const nightOverlay = document.getElementById("night-overlay");
 
-document.addEventListener("mousemove", (e) => {
-  const x = e.clientX;
-  const y = e.clientY;
+let baseRadius = 250; // базовый радиус фонарика
+let maxRadius = 320;  // максимальный радиус в центре
+let minRadius = 200;  // минимальный радиус
 
+// === Слежение за курсором и динамический радиус ===
+document.addEventListener("mousemove", (e) => {
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+
+  const dx = e.clientX - centerX;
+  const dy = e.clientY - centerY;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
+
+  // Рассчитываем радиус от расстояния до центра
+  let dynamicRadius = baseRadius + (maxDistance - distance) / 15;
+
+  // Ограничиваем радиус
+  dynamicRadius = Math.min(maxRadius, Math.max(minRadius, dynamicRadius));
+
+  // Обновляем стиль overlay
   nightOverlay.style.background = `
     radial-gradient(
-      circle at ${x}px ${y}px,
-      rgba(0, 0, 0, 0) 50px,
-      rgba(0, 0, 0, 0.95) 333px
+      circle at ${e.clientX}px ${e.clientY}px,
+      rgba(0, 0, 0, 0) 80px,
+      rgba(0, 0, 0, 0.95) ${dynamicRadius}px
     )
   `;
 });
