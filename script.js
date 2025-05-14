@@ -575,7 +575,6 @@ function setBackground(preset) {
     } else {
       layer1.style.display = "none";
     }
-
     if (layers.layer2) {
       layer2.style.display = "block";
       layer2.style.backgroundImage = `url('${layers.layer2}')`;
@@ -590,9 +589,11 @@ function setBackground(preset) {
   // Меняем цвет частиц под стиль
   if (preset === "anime") {
     setParticleColor("255, 180, 255"); // Розовые частицы для аниме
+  } else if (preset === "minimal") {
+    setParticleColor("255, 255, 255"); // Белые частицы для минимала
   } else {
     const currentTheme = localStorage.getItem("theme") || "dark";
-    updateParticleColor(currentTheme); // Стандартный цвет под тему
+    updateParticleColor(currentTheme); // Цвет под тему по умолчанию
   }
 }
 
