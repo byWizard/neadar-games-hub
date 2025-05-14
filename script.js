@@ -612,31 +612,30 @@ function setBackground(preset) {
     }
   }
 
-  // Сохраняем в localStorage
   localStorage.setItem("bgPreset", preset);
 
-  // === Режим "ночь с фонариком" ===
+  // Режим "ночь с фонариком"
   if (preset === "night") {
-    setParticleColor("255, 255, 255"); // Белые частицы (если нужно)
-    document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "none"); // Отключаем параллакс
-    document.getElementById("particles").style.display = "none"; // 🔥 Отключаем частицы
-    nightOverlay.style.display = "block"; // Включаем ночной фонарик
+    setParticleColor("255, 255, 255"); // Белые частицы
+    document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "block");
+    document.getElementById("particles").style.display = "block";
+    nightOverlay.style.display = "block"; // Только над фоном
 
-  // === Режим аниме ===
+  // Режим аниме
   } else if (preset === "anime") {
-    setParticleColor("255, 180, 255"); // Розовые частицы
+    setParticleColor("255, 180, 255");
     document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "block");
     document.getElementById("particles").style.display = "block";
     nightOverlay.style.display = "none";
 
-  // === Режим минимал ===
+  // Режим минимал
   } else if (preset === "minimal") {
-    setParticleColor("255, 255, 255"); // Белые частицы
+    setParticleColor("255, 255, 255");
     document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "none");
     document.getElementById("particles").style.display = "block";
     nightOverlay.style.display = "none";
 
-  // === Все остальные пресеты ===
+  // Все остальные пресеты
   } else {
     const currentTheme = localStorage.getItem("theme") || "dark";
     updateParticleColor(currentTheme);
