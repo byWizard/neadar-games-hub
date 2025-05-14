@@ -457,23 +457,28 @@ const toggleParallaxBtn = document.getElementById("toggleParallaxBtn");
 const canvas = document.getElementById("particles");
 let isParticlesEnabled = localStorage.getItem("particlesEnabled") !== "false";
 
-// Установка начального состояния
+// Установка начального состояния + иконка
+function updateParticleButtonIcon() {
+  const icon = toggleParallaxBtn.querySelector(".icon-galaxy");
+  icon.textContent = isParticlesEnabled ? "✨" : "🚫";
+  toggleParallaxBtn.title = isParticlesEnabled ? "партиклы нахуй" : "вернуть партиклы";
+}
+
+// Применяем начальное состояние
 if (!isParticlesEnabled) {
   canvas.style.display = "none";
 }
+updateParticleButtonIcon(); // Обновляем иконку при загрузке
 
 toggleParallaxBtn.addEventListener("click", () => {
   isParticlesEnabled = !isParticlesEnabled;
   if (isParticlesEnabled) {
     canvas.style.display = "block";
-    toggleParallaxBtn.querySelector(".icon-galaxy").textContent = "🚫";
-    toggleParallaxBtn.title = "партиклы нахуй";
   } else {
     canvas.style.display = "none";
-    toggleParallaxBtn.querySelector(".icon-galaxy").textContent = "✨";
-    toggleParallaxBtn.title = "партиклы вернуть";
   }
   localStorage.setItem("particlesEnabled", isParticlesEnabled);
+  updateParticleButtonIcon(); // Обновляем иконку при клике
 });
 
   // Линии между частицами
