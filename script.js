@@ -612,29 +612,6 @@ function setBackground(preset) {
     }
   }
 
-  localStorage.setItem("bgPreset", preset);
-
-  // Режим "ночь с фонариком"
-function setBackground(preset) {
-  const layers = backgroundPresets[preset];
-  const layer1 = document.querySelector(".layer-1");
-  const layer2 = document.querySelector(".layer-2");
-
-  if (layer1 && layer2) {
-    if (layers.layer1) {
-      layer1.style.display = "block";
-      layer1.style.backgroundImage = `url('${layers.layer1}')`;
-    } else {
-      layer1.style.display = "none";
-    }
-    if (layers.layer2) {
-      layer2.style.display = "block";
-      layer2.style.backgroundImage = `url('${layers.layer2}')`;
-    } else {
-      layer2.style.display = "none";
-    }
-  }
-
   // Сохраняем в localStorage
   localStorage.setItem("bgPreset", preset);
 
