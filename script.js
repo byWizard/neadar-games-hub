@@ -466,11 +466,11 @@ toggleParallaxBtn.addEventListener("click", () => {
   isParticlesEnabled = !isParticlesEnabled;
   if (isParticlesEnabled) {
     canvas.style.display = "block";
-    toggleParallaxBtn.querySelector(".icon-galaxy").textContent = "🌌";
+    toggleParallaxBtn.querySelector(".icon-galaxy").textContent = "🚫";
     toggleParallaxBtn.title = "партиклы нахуй";
   } else {
     canvas.style.display = "none";
-    toggleParallaxBtn.querySelector(".icon-galaxy").textContent = "🚫";
+    toggleParallaxBtn.querySelector(".icon-galaxy").textContent = "✨";
     toggleParallaxBtn.title = "партиклы вернуть";
   }
   localStorage.setItem("particlesEnabled", isParticlesEnabled);
