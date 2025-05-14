@@ -618,7 +618,7 @@ function setBackground(preset) {
   if (preset === "night") {
     setParticleColor("255, 255, 255"); // Белые частицы
     document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "block");
-    document.getElementById("particles").style.display = "block";
+    document.getElementById("particles").style.display = "none";
     nightOverlay.style.display = "block"; // Только над фоном
 
   // Режим аниме
