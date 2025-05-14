@@ -582,3 +582,17 @@ footer strong.version-tag {
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* === Фонарик === */
+#night-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 50px, rgba(0, 0, 0, 0.95) 200px);
+  pointer-events: none;
+  z-index: 9997;
+  display: none;
+  transition: background 0.1s ease;
+}
