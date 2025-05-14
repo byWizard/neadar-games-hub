@@ -614,14 +614,34 @@ function setBackground(preset) {
   // Сохраняем в localStorage
   localStorage.setItem("bgPreset", preset);
 
-  // Меняем цвет частиц под стиль
-  if (preset === "anime") {
+  // === Режим "ночь с фонариком" ===
+  if (preset === "night") {
+    setParticleColor("255, 255, 255"); // Белые частицы
+    document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "none");
+    document.getElementById("particles").style.display = "none"; // Выключаем частицы
+    nightOverlay.style.display = "block"; // Включаем ночной фонарик
+
+  // === Режим аниме ===
+  } else if (preset === "anime") {
     setParticleColor("255, 180, 255"); // Розовые частицы для аниме
+    document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "block");
+    document.getElementById("particles").style.display = "block";
+    nightOverlay.style.display = "none"; // Выключаем ночной режим
+
+  // === Режим минимал ===
   } else if (preset === "minimal") {
-    setParticleColor("255, 255, 255"); // Белые частицы для минимала
+    setParticleColor("255, 255, 255"); // Белые частицы
+    document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "none");
+    document.getElementById("particles").style.display = "block";
+    nightOverlay.style.display = "none"; // Выключаем ночной режим
+
+  // === Все остальные пресеты ===
   } else {
     const currentTheme = localStorage.getItem("theme") || "dark";
     updateParticleColor(currentTheme); // Цвет под тему по умолчанию
+    document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "block");
+    document.getElementById("particles").style.display = "block";
+    nightOverlay.style.display = "none"; // Выключаем ночной режим
   }
 }
 
