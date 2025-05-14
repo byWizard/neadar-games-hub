@@ -460,7 +460,7 @@ let isParticlesEnabled = localStorage.getItem("particlesEnabled") !== "false";
 // Установка начального состояния + иконка
 function updateParticleButtonIcon() {
   const icon = toggleParallaxBtn.querySelector(".icon-galaxy");
-  icon.textContent = isParticlesEnabled ? "✨" : "🚫";
+  icon.textContent = isParticlesEnabled ? "🚫" : "✨";
   toggleParallaxBtn.title = isParticlesEnabled ? "партиклы нахуй" : "вернуть партиклы";
 }
 
