@@ -452,23 +452,28 @@ function animateParticles() {
     p.draw();
   });
 
-// === Переключение параллакса ===
+// === Переключение анимации частиц через кнопку ===
 const toggleParallaxBtn = document.getElementById("toggleParallaxBtn");
-let isParallaxEnabled = localStorage.getItem("parallaxEnabled") !== "false";
+const canvas = document.getElementById("particles");
+let isParticlesEnabled = localStorage.getItem("particlesEnabled") !== "false";
 
 // Установка начального состояния
-if (!isParallaxEnabled) {
-  document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "none");
+if (!isParticlesEnabled) {
+  canvas.style.display = "none";
 }
 
 toggleParallaxBtn.addEventListener("click", () => {
-  isParallaxEnabled = !isParallaxEnabled;
-
-  document.querySelectorAll(".parallax-bg").forEach(el => {
-    el.style.display = isParallaxEnabled ? "block" : "none";
-  });
-
-  localStorage.setItem("parallaxEnabled", isParallaxEnabled);
+  isParticlesEnabled = !isParticlesEnabled;
+  if (isParticlesEnabled) {
+    canvas.style.display = "block";
+    toggleParallaxBtn.querySelector(".icon-galaxy").textContent = "🌌";
+    toggleParallaxBtn.title = "партиклы нахуй";
+  } else {
+    canvas.style.display = "none";
+    toggleParallaxBtn.querySelector(".icon-galaxy").textContent = "🚫";
+    toggleParallaxBtn.title = "партиклы вернуть";
+  }
+  localStorage.setItem("particlesEnabled", isParticlesEnabled);
 });
 
   // Линии между частицами
