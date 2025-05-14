@@ -541,8 +541,8 @@ const backgroundPresets = {
     layer2: "https://i.ibb.co/TxZ8DG5q/img3-akspic-ru-anime-v-dayz-anime-multik-ryomen-ego-nogi-yudzi-itadori-5120x2880.jpg"
   },
   nature: { // например, природа
-    layer1: "https://picsum.photos/id/1015/1920/1080 ",
-    layer2: "https://picsum.photos/id/1016/1920/1080 "
+    layer1: "",
+    layer2: "https://i.ibb.co/DHgKFrZp/img1-akspic-ru-gruppa-kadini-ozero-mizurina-alpy-gora-monte-pelmo-6016x3384.jpg"
   },
   cyberpunk: { // например, киберпанк
     layer1: "https://picsum.photos/id/1025/1920/1080 ",
