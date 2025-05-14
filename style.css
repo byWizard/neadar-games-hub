@@ -489,9 +489,7 @@ footer strong.version-tag {
 
 @keyframes parallaxMove {
   0%   { transform: translate(0, 0) rotate(0deg); }
-  25%  { transform: translate(-8px, -8px) rotate(-0.5deg); }
-  50%  { transform: translate(9px, -17px) rotate(0.5deg); }
-  75%  { transform: translate(-5px, -13px) rotate(-0.2deg); }
+  50%  { transform: translate(3px, -5px) rotate(0.1deg); }
   100% { transform: translate(0, 0) rotate(0deg); }
 }
 
