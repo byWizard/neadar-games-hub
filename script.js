@@ -676,3 +676,31 @@ window.addEventListener("DOMContentLoaded", () => {
   const savedPreset = localStorage.getItem("bgPreset") || "cosmic";
   setBackground(savedPreset);
 });
+
+// === Счётчик FPS ===
+const fpsCounter = document.getElementById("fps-counter");
+let lastTime = performance.now();
+let frameCount = 0;
+let fps = 0;
+
+function updateFPS() {
+  const now = performance.now();
+  const delta = now - lastTime;
+  frameCount++;
+
+  if (delta >= 1000) {
+    fps = Math.round((frameCount * 1000) / delta);
+    frameCount = 0;
+    lastTime = now;
+  }
+
+  if (fpsCounter) {
+    fpsCounter.textContent = `${fps} FPS`;
+  }
+
+  requestAnimationFrame(updateFPS);
+}
+
+if (fpsCounter) {
+  updateFPS();
+}
