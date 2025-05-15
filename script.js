@@ -573,7 +573,7 @@ const backgroundPresets = {
   },
   anime: {
     layer1: null,
-    layer2: "https://i.ibb.co/pjHpFQW8/img1-akspic-ru-voda-gora-gidroresursy-rastenie-oblako-4096x2340.jpg"
+    layer2: "https://i.ibb.co/xttMC2sR/178023-temnaya-ubijca-akame-akame-multik-ubijca-akame-rukav-7680x4320-1.jpg"
   },
   nature: { // например, природа
     layer1: null,
