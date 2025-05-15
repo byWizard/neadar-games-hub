@@ -595,3 +595,20 @@ footer strong.version-tag {
   z-index: -1; /* Важно: только над фоном, под интерфейсом */
   display: none;
 }
+/* FPS */
+#fps-counter {
+  position: fixed;
+  top: 1rem;
+  left: 1rem; /* Левый верхний угол */
+  z-index: 9998;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #0f0;
+  font-family: monospace;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #0f0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  user-select: none;
+}
