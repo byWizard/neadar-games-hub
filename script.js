@@ -585,7 +585,7 @@ const backgroundPresets = {
   },
   night: {
   layer1: "https://picsum.photos/id/1025/1920/1080 ", 
-  layer2: "https://i.ibb.co/RTHR92CQ/img2-akspic-ru-monohromnyj-noch-karta-dizajn-mir-2560x1600.jpg"// тёмный фон города ночью
+  layer2: "https://i.ibb.co/fGYDcNmK/img2-akspic-ru-monohromnyj-noch-karta-dizajn-mir-2560x1600.jpg"// тёмный фон города ночью
   },
   minimal: {
     layer1: null,
