@@ -704,3 +704,18 @@ function updateFPS() {
 if (fpsCounter) {
   updateFPS();
 }
+// === Тест скрытого сообщения ===
+const hiddenMessage = document.querySelector('.hidden-message');
+
+document.addEventListener('mousemove', (e) => {
+  const rect = hiddenMessage.getBoundingClientRect();
+  const dx = e.clientX - rect.left;
+  const dy = e.clientY - rect.top;
+  const distance = Math.sqrt(dx*dx + dy*dy);
+
+  if (distance < 100) {
+    hiddenMessage.style.opacity = '1';
+  } else {
+    hiddenMessage.style.opacity = '0';
+  }
+});
