@@ -583,17 +583,36 @@ footer strong.version-tag {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* === Фонарик === */
+/* === Фонарик + ночной режим === */
 #night-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 50px, rgba(0, 0, 0, 0.95) 200px);
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.4) 10px,   /* яркий центральный блик */
+    rgba(255, 255, 255, 0.2) 60px,   /* мягкий свет вокруг */
+    rgba(0, 0, 0, 0.95) 300px        /* тень вокруг */
+  );
   pointer-events: none;
-  z-index: -1; /* Важно: только над фоном, под интерфейсом */
+  z-index: 9996; /* ниже FPS, но выше контента */
   display: none;
+  transition: background 0.2s ease;
+}
+
+/* Добавляем текстуру зерна или шума поверх */
+#night-overlay::after {
+  content: "";
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background-image: url('https://www.transparenttextures.com/patterns/noise-diagonal.png '); /* текстура шума */
+  opacity: 0.05; /* слабая прозрачность */
+  pointer-events: none;
 }
 /* FPS */
 #fps-counter {
