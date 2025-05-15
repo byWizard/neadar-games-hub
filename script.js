@@ -577,7 +577,7 @@ const backgroundPresets = {
   },
   nature: { // например, природа
     layer1: null,
-    layer2: "https://i.ibb.co/DHgKFrZp/img1-akspic-ru-gruppa-kadini-ozero-mizurina-alpy-gora-monte-pelmo-6016x3384.jpg"
+    layer2: "https://i.ibb.co/pjHpFQW8/img1-akspic-ru-voda-gora-gidroresursy-rastenie-oblako-4096x2340.jpg"
   },
   cyberpunk: { // например, киберпанк
     layer1: "https://picsum.photos/id/1025/1920/1080 ",
