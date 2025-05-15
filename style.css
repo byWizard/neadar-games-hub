@@ -597,7 +597,7 @@ footer strong.version-tag {
     rgba(0, 0, 0, 0.95) 300px        /* тень вокруг */
   );
   pointer-events: none;
-  z-index: 9996; /* ниже FPS, но выше контента */
+  z-index: -1; /* ниже FPS, но выше контента */
   display: none;
   transition: background 0.2s ease;
 }
