@@ -454,38 +454,52 @@ function animateParticles() {
   });
 
 // === Фонарик ===
-// === Переменные для ночного режима ===
 const nightOverlay = document.getElementById("night-overlay");
 
-let baseRadius = 250; // базовый радиус фонарика
-let maxRadius = 320;  // максимальный радиус в центре
-let minRadius = 200;  // минимальный радиус
+let baseRadius = 250;
+let maxRadius = 320;
+let minRadius = 200;
 
-// === Слежение за курсором и динамический радиус ===
-document.addEventListener("mousemove", (e) => {
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+let smoothX = mouseX;
+let smoothY = mouseY;
+
+function updateMousePosition(e) {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+}
+
+document.addEventListener("mousemove", updateMousePosition);
+
+function animateFlashlight() {
+  smoothX += (mouseX - smoothX) * 0.1;
+  smoothY += (mouseY - smoothY) * 0.1;
+
   const centerX = window.innerWidth / 2;
   const centerY = window.innerHeight / 2;
-
-  const dx = e.clientX - centerX;
-  const dy = e.clientY - centerY;
+  const dx = smoothX - centerX;
+  const dy = smoothY - centerY;
   const distance = Math.sqrt(dx * dx + dy * dy);
   const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
 
-  // Рассчитываем радиус от расстояния до центра
   let dynamicRadius = baseRadius + (maxDistance - distance) / 15;
-
-  // Ограничиваем радиус
   dynamicRadius = Math.min(maxRadius, Math.max(minRadius, dynamicRadius));
 
-  // Обновляем стиль overlay
   nightOverlay.style.background = `
     radial-gradient(
-      circle at ${e.clientX}px ${e.clientY}px,
-      rgba(0, 0, 0, 0) 80px,
+      circle at ${smoothX}px ${smoothY}px,
+      rgba(0, 0, 0, 0) ${dynamicRadius * 0.3}px,
+      rgba(0, 0, 0, 0.4) ${dynamicRadius * 0.6}px,
+      rgba(0, 0, 0, 0.7) ${dynamicRadius * 0.8}px,
       rgba(0, 0, 0, 0.95) ${dynamicRadius}px
     )
   `;
-});
+
+  requestAnimationFrame(animateFlashlight);
+}
+
+animateFlashlight();
 
 // === Переключение анимации частиц через кнопку ===
 const toggleParallaxBtn = document.getElementById("toggleParallaxBtn");
