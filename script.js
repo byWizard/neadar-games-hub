@@ -644,7 +644,6 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 // === ФОНАРИК (отдельная плавная анимация) ===
-const nightOverlay = document.getElementById("night-overlay");
 let baseRadius = 250;
 let maxRadius = 320;
 let minRadius = 200;
