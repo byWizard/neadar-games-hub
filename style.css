@@ -604,8 +604,8 @@ footer strong.version-tag {
   background-color: rgba(255, 255, 255, 0.85); /* Светлый фон с прозрачностью */
   color: #000; /* Тёмный текст для контраста */
   font-family: monospace;
-  font-size: 0.85rem;
-  padding: 0.25rem 0.5rem;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.3rem;
   border: 1px solid #fff; /* Белая обводка */
   border-radius: 4px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
