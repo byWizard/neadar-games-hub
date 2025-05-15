@@ -581,7 +581,7 @@ const backgroundPresets = {
   },
   cyberpunk: { // например, киберпанк
     layer1: "https://picsum.photos/id/1025/1920/1080 ",
-    layer2: "https://picsum.photos/id/1027/1920/1080 "
+    layer2: "https://i.ibb.co/3yNNYJgN/163092-kiberpank-kiberpank-2077-kiberpank-2020-etap-xbox-one-3840x2160.jpg"
   },
   night: {
   layer1: null, 
