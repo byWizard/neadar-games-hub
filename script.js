@@ -458,8 +458,8 @@ function animateParticles() {
 const nightOverlay = document.getElementById("night-overlay");
 
 let baseRadius = 250; // базовый радиус фонарика
-let maxRadius = 320;  // максимальный радиус в центре
-let minRadius = 200;  // минимальный радиус
+let maxRadius = 390;  // максимальный радиус в центре
+let minRadius = 185;  // минимальный радиус
 
 // === Слежение за курсором и динамический радиус ===
 document.addEventListener("mousemove", (e) => {
