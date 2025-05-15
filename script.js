@@ -453,54 +453,6 @@ function animateParticles() {
     p.draw();
   });
 
-// === Фонарик ===
-const nightOverlay = document.getElementById("night-overlay");
-
-let baseRadius = 250;
-let maxRadius = 320;
-let minRadius = 200;
-
-let mouseX = window.innerWidth / 2;
-let mouseY = window.innerHeight / 2;
-let smoothX = mouseX;
-let smoothY = mouseY;
-
-function updateMousePosition(e) {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-}
-
-document.addEventListener("mousemove", updateMousePosition);
-
-function animateFlashlight() {
-  smoothX += (mouseX - smoothX) * 0.1;
-  smoothY += (mouseY - smoothY) * 0.1;
-
-  const centerX = window.innerWidth / 2;
-  const centerY = window.innerHeight / 2;
-  const dx = smoothX - centerX;
-  const dy = smoothY - centerY;
-  const distance = Math.sqrt(dx * dx + dy * dy);
-  const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
-
-  let dynamicRadius = baseRadius + (maxDistance - distance) / 15;
-  dynamicRadius = Math.min(maxRadius, Math.max(minRadius, dynamicRadius));
-
-  nightOverlay.style.background = `
-    radial-gradient(
-      circle at ${smoothX}px ${smoothY}px,
-      rgba(0, 0, 0, 0) ${dynamicRadius * 0.3}px,
-      rgba(0, 0, 0, 0.4) ${dynamicRadius * 0.6}px,
-      rgba(0, 0, 0, 0.7) ${dynamicRadius * 0.8}px,
-      rgba(0, 0, 0, 0.95) ${dynamicRadius}px
-    )
-  `;
-
-  requestAnimationFrame(animateFlashlight);
-}
-
-animateFlashlight();
-
 // === Переключение анимации частиц через кнопку ===
 const toggleParallaxBtn = document.getElementById("toggleParallaxBtn");
 const canvas = document.getElementById("particles");
@@ -690,3 +642,50 @@ window.addEventListener("DOMContentLoaded", () => {
   const savedPreset = localStorage.getItem("bgPreset") || "cosmic";
   setBackground(savedPreset);
 });
+
+// === ФОНАРИК (отдельная плавная анимация) ===
+const nightOverlay = document.getElementById("night-overlay");
+let baseRadius = 250;
+let maxRadius = 320;
+let minRadius = 200;
+
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+let smoothX = mouseX;
+let smoothY = mouseY;
+
+// Обновляем позицию мыши
+document.addEventListener("mousemove", (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+function animateFlashlight() {
+  // Плавное движение света
+  smoothX += (mouseX - smoothX) * 0.1;
+  smoothY += (mouseY - smoothY) * 0.1;
+
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight / 2;
+  const dx = smoothX - centerX;
+  const dy = smoothY - centerY;
+  const distance = Math.sqrt(dx * dx + dy * dy);
+  const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
+
+  let dynamicRadius = baseRadius + (maxDistance - distance) / 15;
+  dynamicRadius = Math.min(maxRadius, Math.max(minRadius, dynamicRadius));
+
+  nightOverlay.style.background = `
+    radial-gradient(
+      circle at ${smoothX}px ${smoothY}px,
+      rgba(0, 0, 0, 0) ${dynamicRadius * 0.3}px,
+      rgba(0, 0, 0, 0.4) ${dynamicRadius * 0.6}px,
+      rgba(0, 0, 0, 0.7) ${dynamicRadius * 0.8}px,
+      rgba(0, 0, 0, 0.95) ${dynamicRadius}px
+    )
+  `;
+
+  requestAnimationFrame(animateFlashlight);
+}
+
+animateFlashlight(); // Запускаем фонарик
