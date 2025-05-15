@@ -572,11 +572,11 @@ const backgroundPresets = {
     layer2: "https://i.ibb.co/bjv5H8FP/143309-podzemnye-vody-oblako-atmosfera-nebo-tumannost-7680x4320.jpg"
   },
   anime: {
-    layer1: null,
+    layer1: "https://picsum.photos/id/1025/1920/1080 ",
     layer2: "https://i.ibb.co/xttMC2sR/178023-temnaya-ubijca-akame-akame-multik-ubijca-akame-rukav-7680x4320-1.jpg"
   },
   nature: { // например, природа
-    layer1: null,
+    layer1: "https://picsum.photos/id/1025/1920/1080 ",
     layer2: "https://i.ibb.co/pjHpFQW8/img1-akspic-ru-voda-gora-gidroresursy-rastenie-oblako-4096x2340.jpg"
   },
   cyberpunk: { // например, киберпанк
@@ -584,7 +584,7 @@ const backgroundPresets = {
     layer2: "https://i.ibb.co/3yNNYJgN/163092-kiberpank-kiberpank-2077-kiberpank-2020-etap-xbox-one-3840x2160.jpg"
   },
   night: {
-  layer1: null, 
+  layer1: "https://picsum.photos/id/1025/1920/1080 ", 
   layer2: "https://i.ibb.co/RTHR92CQ/img2-akspic-ru-monohromnyj-noch-karta-dizajn-mir-2560x1600.jpg"// тёмный фон города ночью
   },
   minimal: {
