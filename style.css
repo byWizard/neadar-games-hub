@@ -599,15 +599,16 @@ footer strong.version-tag {
 #fps-counter {
   position: fixed;
   top: 1rem;
-  left: 1rem; /* Левый верхний угол */
+  left: 1rem;
   z-index: 9998;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: #0f0;
+  background-color: rgba(255, 255, 255, 0.85); /* Светлый фон с прозрачностью */
+  color: #000; /* Тёмный текст для контраста */
   font-family: monospace;
   font-size: 0.85rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 5px;
-  box-shadow: 0 0 5px #0f0;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #fff; /* Белая обводка */
+  border-radius: 4px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   transition: opacity 0.3s ease;
   pointer-events: none;
   user-select: none;
