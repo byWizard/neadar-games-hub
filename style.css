@@ -632,19 +632,6 @@ footer strong.version-tag {
   pointer-events: none;
   user-select: none;
 }
-/* Тестовое скрытое сообщение */
-.hidden-message {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.5rem;
-  color: #0f0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.5s ease;
-  z-index: 9999;
-}
 
 /* === Кнопка просмотра профилей ===1111 */
 #profileViewerBtn {
