@@ -152,57 +152,33 @@ authRequiredLoginBtn.addEventListener("click", () => {
   auth.signInWithPopup(provider).catch(err => alert("Ошибка входа: " + err.message));
 });
 
+// === Слушатель состояния пользователя ===
 auth.onAuthStateChanged((user) => {
   isLoadingAuth = false;
   if (user) {
     currentUser = user;
+    authBtn.textContent = "Выйти";
+    userStatus.textContent = `Вы вошли как ${user.displayName}`;
 
-    const userRef = database.ref(`users/${currentUser.uid}`);
-
-    // Получаем текущие данные пользователя из базы
-    userRef.once("value").then(snapshot => {
-      const userData = snapshot.val();
-
-      // Если пользователь новый или отсутствует в базе — создаём минимальный профиль
-      if (!userData) {
-        return userRef.set({
-          name: user.displayName,
-          email: user.email,
-          games: [] // Начальный пустой список
-        });
-      }
-
-      // Если есть данные, но нет некоторых полей — добавляем их, не трогая игры
-      const updates = {};
-      if (!userData.name) updates.name = user.displayName;
-      if (!userData.email) updates.email = user.email;
-      if (!userData.games) updates.games = [];
-
-      // Обновляем только недостающие поля
-      if (Object.keys(updates).length > 0) {
-        return userRef.update(updates);
-      }
-    }).then(() => {
-      // После всех обновлений загружаем данные пользователя
-      return userRef.once("value");
-    }).then(snapshot => {
+    // Загружаем данные только из Firebase
+    database.ref(`users/${currentUser.uid}`).once("value").then(snapshot => {
       const data = snapshot.val();
-      games = data?.games || []; // Загружаем игры из Firebase
+      games = data?.games || []; // ❗ Не используем localStorage, если пользователь залогинен
+
       applyFilters();
       toggleAuthUI(false);
     }).catch(console.error);
 
-    authBtn.textContent = "Выйти";
-    userStatus.textContent = `Вы вошли как ${user.displayName}`;
   } else {
     currentUser = null;
     authBtn.textContent = "Войти через Google";
     userStatus.textContent = "Вы не вошли";
-    games = [];
+    games = []; // ❗ При выходе всегда чистим список
     applyFilters();
     toggleAuthUI(true);
   }
 });
+
 function toggleAuthUI(isVisible) {
   if (isLoadingAuth) return; // Пока проверяем — не показываем оверлей
   authOnlyOverlay.style.display = isVisible ? "flex" : "none";
@@ -754,12 +730,10 @@ profileViewerModal.addEventListener("click", e => {
 // === ЗАГРУЗКА СПИСКА ПОЛЬЗОВАТЕЛЕЙ ИЗ FIREBASE ===
 database.ref("users").on("value", snapshot => {
   const data = snapshot.val() || {};
-  console.log("Raw users data from Firebase:", data);
   allUsers = Object.entries(data).map(([uid, userData]) => ({
     uid,
     ...userData
   }));
-  console.log("allUsers после загрузки:", allUsers);
 });
 
 // === ПОИСК ПОЛЬЗОВАТЕЛЕЙ ===
@@ -769,13 +743,11 @@ userSearchInput.addEventListener("input", e => {
     userResultsList.innerHTML = "";
     return;
   }
+
   const results = allUsers.filter(user =>
     user.name?.toLowerCase().includes(query) ||
     user.email?.toLowerCase().includes(query)
   );
-  console.log("Результаты поиска:", results); // 🔥 Логируем результат
-  renderUserResults(results);
-});
 
   renderUserResults(results);
 });
