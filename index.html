@@ -26,6 +26,20 @@
   </div>
   <!-- фонарик -->
   <div id="night-overlay"></div>
+  <!-- Кнопка просмотра чужих профилей -->
+<button id="profileViewerBtn" title="🔍 Найти пользователя">
+  <span class="icon-profile">👁️</span>
+</button>
+
+<!-- Модальное окно для поиска и просмотра профиля -->
+<div id="profileViewerModal" class="modal hidden">
+  <div class="modal-content">
+    <h3>🔍 Поиск пользователей</h3>
+    <input type="text" id="userSearchInput" placeholder="Введите имя или ник..." />
+    <ul id="userResultsList"></ul>
+    <button id="backToOwnProfile" class="hidden">⬅️ Вернуться к моему списку</button>
+  </div>
+</div>
 
   <header>
     <h1>H U B</h1>
