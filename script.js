@@ -754,10 +754,12 @@ profileViewerModal.addEventListener("click", e => {
 // === ЗАГРУЗКА СПИСКА ПОЛЬЗОВАТЕЛЕЙ ИЗ FIREBASE ===
 database.ref("users").on("value", snapshot => {
   const data = snapshot.val() || {};
+  console.log("Raw users data from Firebase:", data);
   allUsers = Object.entries(data).map(([uid, userData]) => ({
     uid,
     ...userData
   }));
+  console.log("allUsers после загрузки:", allUsers);
 });
 
 // === ПОИСК ПОЛЬЗОВАТЕЛЕЙ ===
@@ -767,11 +769,13 @@ userSearchInput.addEventListener("input", e => {
     userResultsList.innerHTML = "";
     return;
   }
-
   const results = allUsers.filter(user =>
     user.name?.toLowerCase().includes(query) ||
     user.email?.toLowerCase().includes(query)
   );
+  console.log("Результаты поиска:", results); // 🔥 Логируем результат
+  renderUserResults(results);
+});
 
   renderUserResults(results);
 });
