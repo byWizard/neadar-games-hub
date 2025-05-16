@@ -719,3 +719,114 @@ document.addEventListener('mousemove', (e) => {
     hiddenMessage.style.opacity = '0';
   }
 });
+
+// === ПЕРЕМЕННЫЕ ПРОСМОТРА ПРОФИЛЕЙ ===
+let isViewingProfile = false; // Режим просмотра чужого профиля
+const profileViewerBtn = document.getElementById("profileViewerBtn");
+const profileViewerModal = document.getElementById("profileViewerModal");
+const userSearchInput = document.getElementById("userSearchInput");
+const userResultsList = document.getElementById("userResultsList");
+const backToOwnProfileBtn = document.getElementById("backToOwnProfile");
+
+let allUsers = []; // Все пользователи из Firebase
+
+// === ОТКРЫТИЕ/ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА ===
+profileViewerBtn.addEventListener("click", () => {
+  profileViewerModal.classList.remove("hidden");
+  userSearchInput.focus();
+});
+
+profileViewerModal.addEventListener("click", e => {
+  if (e.target === profileViewerModal) {
+    profileViewerModal.classList.add("hidden");
+  }
+});
+
+// === ЗАГРУЗКА СПИСКА ПОЛЬЗОВАТЕЛЕЙ ИЗ FIREBASE ===
+database.ref("users").on("value", snapshot => {
+  const data = snapshot.val() || {};
+  allUsers = Object.entries(data).map(([uid, userData]) => ({
+    uid,
+    ...userData
+  }));
+});
+
+// === ПОИСК ПОЛЬЗОВАТЕЛЕЙ ===
+userSearchInput.addEventListener("input", e => {
+  const query = e.target.value.trim().toLowerCase();
+  if (!query) {
+    userResultsList.innerHTML = "";
+    return;
+  }
+
+  const results = allUsers.filter(user =>
+    user.name?.toLowerCase().includes(query) ||
+    user.email?.toLowerCase().includes(query)
+  );
+
+  renderUserResults(results);
+});
+
+function renderUserResults(results) {
+  userResultsList.innerHTML = "";
+  if (results.length === 0) {
+    const li = document.createElement("li");
+    li.textContent = "Пользователи не найдены";
+    userResultsList.appendChild(li);
+    return;
+  }
+
+  results.forEach(user => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${user.name}</strong><br/><small>${user.email}</small>`;
+    li.addEventListener("click", () => loadUserProfile(user.uid));
+    userResultsList.appendChild(li);
+  });
+}
+
+// === ЗАГРУЗКА ЧУЖОГО ПРОФИЛЯ ===
+function loadUserProfile(uid) {
+  database.ref(`users/${uid}`).once("value").then(snapshot => {
+    const data = snapshot.val();
+    if (!data) {
+      alert("Профиль не найден");
+      return;
+    }
+
+    isViewingProfile = true;
+    games = data.games || [];
+
+    applyFilters();
+
+    // Блокируем интерфейс добавления
+    document.querySelector(".add-game")?.classList.add("disabled");
+
+    // Показываем кнопку "Назад"
+    backToOwnProfileBtn.classList.remove("hidden");
+
+    // Закрываем модалку
+    profileViewerModal.classList.add("hidden");
+  }).catch(err => {
+    console.error("Ошибка загрузки профиля:", err);
+    alert("Не удалось загрузить профиль");
+  });
+}
+
+// === ВОЗВРАТ К СВОЕМУ ПРОФИЛЮ ===
+backToOwnProfileBtn.addEventListener("click", () => {
+  isViewingProfile = false;
+  document.querySelector(".add-game")?.classList.remove("disabled");
+  backToOwnProfileBtn.classList.add("hidden");
+
+  // Восстанавливаем свои данные
+  if (currentUser) {
+    database.ref(`users/${currentUser.uid}`).once("value").then(snapshot => {
+      const data = snapshot.val();
+      games = data?.games || [];
+      applyFilters();
+    });
+  } else {
+    games = JSON.parse(localStorage.getItem("games")) || [];
+    applyFilters();
+  }
+});
