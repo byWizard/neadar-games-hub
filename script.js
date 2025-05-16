@@ -152,36 +152,48 @@ authRequiredLoginBtn.addEventListener("click", () => {
   auth.signInWithPopup(provider).catch(err => alert("Ошибка входа: " + err.message));
 });
 
-// === Слушатель состояния пользователя ===
 auth.onAuthStateChanged((user) => {
   isLoadingAuth = false;
   if (user) {
     currentUser = user;
 
-    // ❗ Добавляем/обновляем данные пользователя в Firebase
     const userRef = database.ref(`users/${currentUser.uid}`);
+
+    // Получаем текущие данные пользователя из базы
     userRef.once("value").then(snapshot => {
       const userData = snapshot.val();
-      // Если пользователь новый или отсутствует в базе — сохраняем его
-      if (!userData || !userData.name) {
-        userRef.set({
+
+      // Если пользователь новый или отсутствует в базе — создаём минимальный профиль
+      if (!userData) {
+        return userRef.set({
           name: user.displayName,
           email: user.email,
-          games: [] // Пустой список игр на случай, если его нет
+          games: [] // Начальный пустой список
         });
       }
-    });
 
-    authBtn.textContent = "Выйти";
-    userStatus.textContent = `Вы вошли как ${user.displayName}`;
+      // Если есть данные, но нет некоторых полей — добавляем их, не трогая игры
+      const updates = {};
+      if (!userData.name) updates.name = user.displayName;
+      if (!userData.email) updates.email = user.email;
+      if (!userData.games) updates.games = [];
 
-    // Загружаем данные только из Firebase
-    database.ref(`users/${currentUser.uid}`).once("value").then(snapshot => {
+      // Обновляем только недостающие поля
+      if (Object.keys(updates).length > 0) {
+        return userRef.update(updates);
+      }
+    }).then(() => {
+      // После всех обновлений загружаем данные пользователя
+      return userRef.once("value");
+    }).then(snapshot => {
       const data = snapshot.val();
-      games = data?.games || [];
+      games = data?.games || []; // Загружаем игры из Firebase
       applyFilters();
       toggleAuthUI(false);
     }).catch(console.error);
+
+    authBtn.textContent = "Выйти";
+    userStatus.textContent = `Вы вошли как ${user.displayName}`;
   } else {
     currentUser = null;
     authBtn.textContent = "Войти через Google";
@@ -191,7 +203,6 @@ auth.onAuthStateChanged((user) => {
     toggleAuthUI(true);
   }
 });
-
 function toggleAuthUI(isVisible) {
   if (isLoadingAuth) return; // Пока проверяем — не показываем оверлей
   authOnlyOverlay.style.display = isVisible ? "flex" : "none";
