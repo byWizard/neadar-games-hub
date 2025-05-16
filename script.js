@@ -152,23 +152,6 @@ authRequiredLoginBtn.addEventListener("click", () => {
   auth.signInWithPopup(provider).catch(err => alert("Ошибка входа: " + err.message));
 });
 
-// После того как пользователь вошёл
-const usernamesRef = database.ref(`usernames/${currentUser.displayName.toLowerCase()}`);
-
-userRef.once("value").then(snapshot => {
-  if (!snapshot.exists()) {
-    userRef.set({
-      name: currentUser.displayName,
-      email: currentUser.email,
-      photoURL: currentUser.photoURL,
-      games: []
-    });
-
-    // Сохраняем никнейм для поиска
-    usernamesRef.set(currentUser.uid);
-  }
-});
-
 // === Слушатель состояния пользователя ===
 auth.onAuthStateChanged((user) => {
   isLoadingAuth = false;
