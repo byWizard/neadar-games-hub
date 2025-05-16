@@ -153,7 +153,6 @@ authRequiredLoginBtn.addEventListener("click", () => {
 });
 
 // После того как пользователь вошёл
-const userRef = database.ref(`users/${currentUser.uid}`);
 const usernamesRef = database.ref(`usernames/${currentUser.displayName.toLowerCase()}`);
 
 userRef.once("value").then(snapshot => {
