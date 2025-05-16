@@ -157,23 +157,36 @@ auth.onAuthStateChanged((user) => {
   isLoadingAuth = false;
   if (user) {
     currentUser = user;
+
+    // ❗ Добавляем/обновляем данные пользователя в Firebase
+    const userRef = database.ref(`users/${currentUser.uid}`);
+    userRef.once("value").then(snapshot => {
+      const userData = snapshot.val();
+      // Если пользователь новый или отсутствует в базе — сохраняем его
+      if (!userData || !userData.name) {
+        userRef.set({
+          name: user.displayName,
+          email: user.email,
+          games: [] // Пустой список игр на случай, если его нет
+        });
+      }
+    });
+
     authBtn.textContent = "Выйти";
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
 
     // Загружаем данные только из Firebase
     database.ref(`users/${currentUser.uid}`).once("value").then(snapshot => {
       const data = snapshot.val();
-      games = data?.games || []; // ❗ Не используем localStorage, если пользователь залогинен
-
+      games = data?.games || [];
       applyFilters();
       toggleAuthUI(false);
     }).catch(console.error);
-
   } else {
     currentUser = null;
     authBtn.textContent = "Войти через Google";
     userStatus.textContent = "Вы не вошли";
-    games = []; // ❗ При выходе всегда чистим список
+    games = [];
     applyFilters();
     toggleAuthUI(true);
   }
