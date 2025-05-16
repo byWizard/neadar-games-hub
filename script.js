@@ -15,15 +15,15 @@ const themeToggle = document.getElementById("themeToggle");
 const authOnlyOverlay = document.getElementById("authOnlyOverlay");
 const authRequiredLoginBtn = document.getElementById("authRequiredLoginBtn");
 const nightOverlay = document.getElementById("night-overlay");
-
 let games = [];
 let currentUser = null;
 let isLoadingAuth = true;
+
 // === Firebase Setup ===
 const firebaseConfig = {
   apiKey: "AIzaSyDhMfbhd7emAXNKDexXxaCxZ0k2DfkRcVg",
   authDomain: "my-games-app-hub.firebaseapp.com",
-  databaseURL: "https://my-games-app-hub-default-rtdb.firebaseio.com",
+  databaseURL: "https://my-games-app-hub-default-rtdb.firebaseio.com ",
   projectId: "my-games-app-hub",
   storageBucket: "my-games-app-hub.appspot.com",
   messagingSenderId: "251367004030",
@@ -64,7 +64,7 @@ async function searchGame(query) {
   if (cached) return cached;
   try {
     const response = await fetch(
-      `https://api.rawg.io/api/games?key=${RAWG_API_KEY}&search=${encodeURIComponent(query)}`
+      `https://api.rawg.io/api/games?key= ${RAWG_API_KEY}&search=${encodeURIComponent(query)}`
     );
     const data = await response.json();
     const results = data.results || [];
@@ -78,6 +78,7 @@ async function searchGame(query) {
 
 // === Обработчик поиска по играм ===
 let debounceTimer;
+
 gameSearchInput.addEventListener("input", e => {
   const query = e.target.value.trim();
   if (query.length < 2) {
@@ -127,10 +128,12 @@ function setTheme(theme) {
   localStorage.setItem("theme", theme);
   updateParticleColor(theme);
 }
+
 themeToggle.addEventListener("click", () => {
   const currentTheme = localStorage.getItem("theme") || "dark";
   setTheme(currentTheme === "dark" ? "light" : "dark");
 });
+
 window.addEventListener("DOMContentLoaded", () => {
   const savedTheme = localStorage.getItem("theme") || "dark";
   setTheme(savedTheme);
@@ -147,6 +150,7 @@ authBtn.addEventListener("click", () => {
     auth.signInWithPopup(provider).catch(err => alert("Ошибка входа: " + err.message));
   }
 });
+
 authRequiredLoginBtn.addEventListener("click", () => {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider).catch(err => alert("Ошибка входа: " + err.message));
@@ -160,15 +164,25 @@ auth.onAuthStateChanged((user) => {
     authBtn.textContent = "Выйти";
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
 
-    // Загружаем данные только из Firebase
-    database.ref(`users/${currentUser.uid}`).once("value").then(snapshot => {
-      const data = snapshot.val();
-      games = data?.games || []; // ❗ Не используем localStorage, если пользователь залогинен
+    // Сохраняем профиль при первом входе
+    const profileRef = database.ref(`profiles/${currentUser.uid}`);
+    profileRef.once("value").then(snapshot => {
+      if (!snapshot.exists()) {
+        profileRef.set({
+          name: user.displayName,
+          email: user.email,
+          games: []
+        });
+      }
+    });
 
+    // Загружаем данные только из Firebase
+    profileRef.once("value").then(snapshot => {
+      const data = snapshot.val();
+      games = data?.games || [];
       applyFilters();
       toggleAuthUI(false);
     }).catch(console.error);
-
   } else {
     currentUser = null;
     authBtn.textContent = "Войти через Google";
@@ -187,7 +201,7 @@ function toggleAuthUI(isVisible) {
 // === Сохранение данных ===
 function saveData() {
   if (currentUser) {
-    database.ref(`users/${currentUser.uid}`).set({ games });
+    database.ref(`profiles/${currentUser.uid}`).set({ games });
   } else {
     localStorage.setItem("games", JSON.stringify(games));
   }
@@ -219,18 +233,16 @@ function applyFilters() {
   const term = searchInput.value.toLowerCase();
   const filter = filterSelect.value;
   const filtered = games.filter(g =>
-  g.title.toLowerCase().includes(term) &&
-  (filter === "all" || g.status === filter)
-);
+    g.title.toLowerCase().includes(term) &&
+    (filter === "all" || g.status === filter)
+  );
   renderFilteredGames(filtered);
 }
 
 function renderFilteredGames(filteredGames) {
   const existingCards = [...cardsContainer.querySelectorAll(".card")];
-
   filteredGames.forEach((game, index) => {
     let card = existingCards.find(c => c.dataset.id == game.id);
-
     if (!card) {
       card = document.createElement("div");
       card.className = "card";
@@ -250,7 +262,6 @@ function renderFilteredGames(filteredGames) {
         <textarea class="description">${game.description || ""}</textarea>
         <button class="delete-btn">🗑️ Удалить</button>
       `;
-
       const starsEl = card.querySelector(".stars");
       for (let i = 1; i <= 5; i++) {
         const star = document.createElement("span");
@@ -258,7 +269,6 @@ function renderFilteredGames(filteredGames) {
         star.dataset.rating = i;
         starsEl.appendChild(star);
       }
-
       updateStarDisplay(starsEl, game.rating || 0);
 
       // Звёзды
@@ -271,19 +281,19 @@ function renderFilteredGames(filteredGames) {
       });
 
       // Статус
-const statusEl = card.querySelector(".status");
-statusEl.addEventListener("click", () => {
-  if (game.status === "done") {
-    game.status = "want";
-  } else if (game.status === "want") {
-    game.status = "postponed"; // Переход к новому статусу
-  } else {
-    game.status = "done"; // Цикл из "postponed" -> "done"
-  }
-  saveData();
-  updateCard(card, game); 
-  updateStats(); 
-});
+      const statusEl = card.querySelector(".status");
+      statusEl.addEventListener("click", () => {
+        if (game.status === "done") {
+          game.status = "want";
+        } else if (game.status === "want") {
+          game.status = "postponed";
+        } else {
+          game.status = "done";
+        }
+        saveData();
+        updateCard(card, game);
+        updateStats();
+      });
 
       // Описание
       const descEl = card.querySelector(".description");
@@ -293,13 +303,13 @@ statusEl.addEventListener("click", () => {
       });
 
       // Удаление
-const deleteBtn = card.querySelector(".delete-btn");
-deleteBtn.addEventListener("click", () => {
-  games.splice(index, 1);
-  saveData();
-  applyFilters();
-  updateStats(); // ✅ Добавили обновление счётчика
-});
+      const deleteBtn = card.querySelector(".delete-btn");
+      deleteBtn.addEventListener("click", () => {
+        games.splice(index, 1);
+        saveData();
+        applyFilters();
+        updateStats();
+      });
 
       cardsContainer.appendChild(card);
     } else {
@@ -325,7 +335,7 @@ function updateCard(card, game) {
       ? "Пройдена"
       : game.status === "want"
       ? "Хочу пройти"
-      : "Отложена"; // Текст для нового статуса
+      : "Отложена";
 
   const starsEl = card.querySelector(".stars");
   updateStarDisplay(starsEl, game.rating || 0);
@@ -375,7 +385,6 @@ document.getElementById("importInput").addEventListener("change", e => {
 // === Частицы через Canvas с реакцией на мышь и цветом под тему ===
 const canvas = document.getElementById("particles");
 const ctx = canvas.getContext("2d");
-
 let particles = [];
 let width, height;
 let mouseX = window.innerWidth / 2;
@@ -385,9 +394,9 @@ function resizeCanvas() {
   width = (canvas.width = window.innerWidth);
   height = (canvas.height = window.innerHeight);
 }
+
 resizeCanvas();
 window.addEventListener("resize", resizeCanvas);
-
 window.addEventListener("mousemove", e => {
   mouseX = e.clientX;
   mouseY = e.clientY;
@@ -453,69 +462,6 @@ function animateParticles() {
     p.draw();
   });
 
-// === Фонарик ===
-// === Переменные для ночного режима ===
-const nightOverlay = document.getElementById("night-overlay");
-
-let baseRadius = 250; // базовый радиус фонарика
-let maxRadius = 390;  // максимальный радиус в центре
-let minRadius = 185;  // минимальный радиус
-
-// === Слежение за курсором и динамический радиус ===
-document.addEventListener("mousemove", (e) => {
-  const centerX = window.innerWidth / 2;
-  const centerY = window.innerHeight / 2;
-
-  const dx = e.clientX - centerX;
-  const dy = e.clientY - centerY;
-  const distance = Math.sqrt(dx * dx + dy * dy);
-  const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
-
-  // Рассчитываем радиус от расстояния до центра
-  let dynamicRadius = baseRadius + (maxDistance - distance) / 15;
-
-  // Ограничиваем радиус
-  dynamicRadius = Math.min(maxRadius, Math.max(minRadius, dynamicRadius));
-
-  // Обновляем стиль overlay
-  nightOverlay.style.background = `
-    radial-gradient(
-      circle at ${e.clientX}px ${e.clientY}px,
-      rgba(0, 0, 0, 0) 80px,
-      rgba(0, 0, 0, 0.95) ${dynamicRadius}px
-    )
-  `;
-});
-
-// === Переключение анимации частиц через кнопку ===
-const toggleParallaxBtn = document.getElementById("toggleParallaxBtn");
-const canvas = document.getElementById("particles");
-let isParticlesEnabled = localStorage.getItem("particlesEnabled") !== "false";
-
-// Установка начального состояния + иконка
-function updateParticleButtonIcon() {
-  const icon = toggleParallaxBtn.querySelector(".icon-galaxy");
-  icon.textContent = isParticlesEnabled ? "🚫" : "✨";
-  toggleParallaxBtn.title = isParticlesEnabled ? "партиклы нахуй" : "вернуть партиклы";
-}
-
-// Применяем начальное состояние
-if (!isParticlesEnabled) {
-  canvas.style.display = "none";
-}
-updateParticleButtonIcon(); // Обновляем иконку при загрузке
-
-toggleParallaxBtn.addEventListener("click", () => {
-  isParticlesEnabled = !isParticlesEnabled;
-  if (isParticlesEnabled) {
-    canvas.style.display = "block";
-  } else {
-    canvas.style.display = "none";
-  }
-  localStorage.setItem("particlesEnabled", isParticlesEnabled);
-  updateParticleButtonIcon(); // Обновляем иконку при клике
-});
-
   // Линии между частицами
   for (let i = 0; i < particles.length; i++) {
     for (let j = i + 1; j < particles.length; j++) {
@@ -544,7 +490,7 @@ toggleParallaxBtn.addEventListener("click", () => {
     if (dist < 150) {
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
-      ctx.lineTo(mouseX, mouseY);
+      ctx.lineTo(p.x + dx, p.y + dy);
       ctx.stroke();
     }
   }
@@ -568,24 +514,24 @@ animateParticles();
 // === Объект с пресетами фонов ===
 const backgroundPresets = {
   cosmic: {
-    layer1: "https://i.ibb.co/jkJc4Tbq/135763-nochnoe-nebo-atmosfera-astronomicheskij-obekt-galaktika-tumannost-3840x2160.jpg",
-    layer2: "https://i.ibb.co/bjv5H8FP/143309-podzemnye-vody-oblako-atmosfera-nebo-tumannost-7680x4320.jpg"
+    layer1: "https://i.ibb.co/jkJc4Tbq/135763-nochnoe-nebo-atmosfera-astronomicheskij-obekt-galaktika-tumannost-3840x2160.jpg ",
+    layer2: "https://i.ibb.co/bjv5H8FP/143309-podzemnye-vody-oblako-atmosfera-nebo-tumannost-7680x4320.jpg "
   },
   anime: {
-    layer1: "https://picsum.photos/id/1025/1920/1080 ",
-    layer2: "https://i.ibb.co/xttMC2sR/178023-temnaya-ubijca-akame-akame-multik-ubijca-akame-rukav-7680x4320-1.jpg"
+    layer1: "https://picsum.photos/id/1025/1920/1080  ",
+    layer2: "https://i.ibb.co/xttMC2sR/178023-temnaya-ubijca-akame-akame-multik-ubijca-akame-rukav-7680x4320-1.jpg "
   },
-  nature: { // например, природа
-    layer1: "https://picsum.photos/id/1025/1920/1080 ",
-    layer2: "https://i.ibb.co/pjHpFQW8/img1-akspic-ru-voda-gora-gidroresursy-rastenie-oblako-4096x2340.jpg"
+  nature: {
+    layer1: "https://picsum.photos/id/1025/1920/1080  ",
+    layer2: "https://i.ibb.co/pjHpFQW8/img1-akspic-ru-voda-gora-gidroresursy-rastenie-oblako-4096x2340.jpg "
   },
-  cyberpunk: { // например, киберпанк
-    layer1: "https://picsum.photos/id/1025/1920/1080 ",
-    layer2: "https://i.ibb.co/3yNNYJgN/163092-kiberpank-kiberpank-2077-kiberpank-2020-etap-xbox-one-3840x2160.jpg"
+  cyberpunk: {
+    layer1: "https://picsum.photos/id/1025/1920/1080  ",
+    layer2: "https://i.ibb.co/3yNNYJgN/163092-kiberpank-kiberpank-2077-kiberpank-2020-etap-xbox-one-3840x2160.jpg "
   },
   night: {
-  layer1: "https://picsum.photos/id/1025/1920/1080 ", 
-  layer2: "https://i.ibb.co/WJnMV3P/img2-akspic-ru-monohromnyj-noch-karta-dizajn-mir-2560x1600-2.jpg"// тёмный фон города ночью
+    layer1: "https://picsum.photos/id/1025/1920/1080  ",
+    layer2: "https://i.ibb.co/WJnMV3P/img2-akspic-ru-monohromnyj-noch-karta-dizajn-mir-2560x1600-2.jpg "
   },
   minimal: {
     layer1: null,
@@ -615,19 +561,18 @@ function setBackground(preset) {
   const layer1 = document.querySelector(".layer-1");
   const layer2 = document.querySelector(".layer-2");
 
-  if (layer1 && layer2) {
-    if (layers.layer1) {
-      layer1.style.display = "block";
-      layer1.style.backgroundImage = `url('${layers.layer1}')`;
-    } else {
-      layer1.style.display = "none";
-    }
-    if (layers.layer2) {
-      layer2.style.display = "block";
-      layer2.style.backgroundImage = `url('${layers.layer2}')`;
-    } else {
-      layer2.style.display = "none";
-    }
+  if (layers.layer1) {
+    layer1.style.display = "block";
+    layer1.style.backgroundImage = `url('${layers.layer1}')`;
+  } else {
+    layer1.style.display = "none";
+  }
+
+  if (layers.layer2) {
+    layer2.style.display = "block";
+    layer2.style.backgroundImage = `url('${layers.layer2}')`;
+  } else {
+    layer2.style.display = "none";
   }
 
   localStorage.setItem("bgPreset", preset);
@@ -637,23 +582,17 @@ function setBackground(preset) {
     setParticleColor("255, 255, 255"); // Белые частицы
     document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "block");
     document.getElementById("particles").style.display = "none";
-    nightOverlay.style.display = "block"; // Только над фоном
-
-  // Режим аниме
+    nightOverlay.style.display = "block";
   } else if (preset === "anime") {
     setParticleColor("255, 180, 255");
     document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "block");
     document.getElementById("particles").style.display = "block";
     nightOverlay.style.display = "none";
-
-  // Режим минимал
   } else if (preset === "minimal") {
     setParticleColor("255, 255, 255");
     document.querySelectorAll(".parallax-bg").forEach(el => el.style.display = "none");
     document.getElementById("particles").style.display = "block";
     nightOverlay.style.display = "none";
-
-  // Все остальные пресеты
   } else {
     const currentTheme = localStorage.getItem("theme") || "dark";
     updateParticleColor(currentTheme);
@@ -662,6 +601,7 @@ function setBackground(preset) {
     nightOverlay.style.display = "none";
   }
 }
+
 // === Обработчики кликов по пунктам меню ===
 bgPresetList.querySelectorAll("button[data-bg]").forEach(btn => {
   btn.addEventListener("click", (e) => {
@@ -687,17 +627,14 @@ function updateFPS() {
   const now = performance.now();
   const delta = now - lastTime;
   frameCount++;
-
   if (delta >= 1000) {
     fps = Math.round((frameCount * 1000) / delta);
     frameCount = 0;
     lastTime = now;
   }
-
   if (fpsCounter) {
     fpsCounter.textContent = `${fps} FPS`;
   }
-
   requestAnimationFrame(updateFPS);
 }
 
@@ -712,7 +649,6 @@ const profileViewerModal = document.getElementById("profileViewerModal");
 const userSearchInput = document.getElementById("userSearchInput");
 const userResultsList = document.getElementById("userResultsList");
 const backToOwnProfileBtn = document.getElementById("backToOwnProfile");
-
 let allUsers = []; // Все пользователи из Firebase
 
 // === ОТКРЫТИЕ/ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА ===
@@ -728,7 +664,7 @@ profileViewerModal.addEventListener("click", e => {
 });
 
 // === ЗАГРУЗКА СПИСКА ПОЛЬЗОВАТЕЛЕЙ ИЗ FIREBASE ===
-database.ref("users").on("value", snapshot => {
+database.ref("profiles").on("value", snapshot => {
   const data = snapshot.val() || {};
   allUsers = Object.entries(data).map(([uid, userData]) => ({
     uid,
@@ -743,12 +679,10 @@ userSearchInput.addEventListener("input", e => {
     userResultsList.innerHTML = "";
     return;
   }
-
   const results = allUsers.filter(user =>
     user.name?.toLowerCase().includes(query) ||
     user.email?.toLowerCase().includes(query)
   );
-
   renderUserResults(results);
 });
 
@@ -760,7 +694,6 @@ function renderUserResults(results) {
     userResultsList.appendChild(li);
     return;
   }
-
   results.forEach(user => {
     const li = document.createElement("li");
     li.innerHTML = `<strong>${user.name}</strong><br/><small>${user.email}</small>`;
@@ -771,16 +704,14 @@ function renderUserResults(results) {
 
 // === ЗАГРУЗКА ЧУЖОГО ПРОФИЛЯ ===
 function loadUserProfile(uid) {
-  database.ref(`users/${uid}`).once("value").then(snapshot => {
+  database.ref(`profiles/${uid}`).once("value").then(snapshot => {
     const data = snapshot.val();
     if (!data) {
       alert("Профиль не найден");
       return;
     }
-
     isViewingProfile = true;
     games = data.games || [];
-
     applyFilters();
 
     // Блокируем интерфейс добавления
@@ -805,7 +736,7 @@ backToOwnProfileBtn.addEventListener("click", () => {
 
   // Восстанавливаем свои данные
   if (currentUser) {
-    database.ref(`users/${currentUser.uid}`).once("value").then(snapshot => {
+    database.ref(`profiles/${currentUser.uid}`).once("value").then(snapshot => {
       const data = snapshot.val();
       games = data?.games || [];
       applyFilters();
