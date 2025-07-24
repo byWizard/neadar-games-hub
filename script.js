@@ -160,9 +160,9 @@ auth.onAuthStateChanged((user) => {
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
 
     // Загружаем данные только из Firebase
-    database.ref(`users/${currentUser.uid}`).once("value").then(snapshot => {
+    database.ref(`users/${currentUser.uid}/games`).once("value").then(snapshot => {
       const data = snapshot.val();
-      games = data?.games || []; // ❗ Не используем localStorage, если пользователь залогинен
+      games = data || [];
 
       applyFilters();
       toggleAuthUI(false);
