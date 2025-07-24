@@ -160,22 +160,21 @@ auth.onAuthStateChanged((user) => {
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
 
     // Загружаем данные только из Firebase
-    database.ref(`users/${currentUser.uid}/games`).once("value").then(snapshot => {
+database.ref(`users/${currentUser.uid}/games`).once("value").then(snapshot => {
   const data = snapshot.val();
   games = data || [];
   applyFilters();
   toggleAuthUI(false);
-    }).catch(console.error);
+}).catch(console.error);
 
-  } else {
-    currentUser = null;
-    authBtn.textContent = "Войти через Google";
-    userStatus.textContent = "Вы не вошли";
-    games = []; // ❗ При выходе всегда чистим список
-    applyFilters();
-    toggleAuthUI(true);
-  }
-});
+} else {
+  currentUser = null;
+  authBtn.textContent = "Войти через Google";
+  userStatus.textContent = "Вы не вошли";
+  games = []; // ❗ При выходе всегда чистим список
+  applyFilters();
+  toggleAuthUI(true);
+}
 
 function toggleAuthUI(isVisible) {
   if (isLoadingAuth) return; // Пока проверяем — не показываем оверлей
