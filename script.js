@@ -165,7 +165,6 @@ auth.onAuthStateChanged((user) => {
   games = data || [];
   applyFilters();
   toggleAuthUI(false);
-});
     }).catch(console.error);
 
   } else {
