@@ -160,21 +160,23 @@ auth.onAuthStateChanged((user) => {
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
 
     // Загружаем данные только из Firebase
-database.ref(`users/${currentUser.uid}/games`).once("value").then(snapshot => {
-  const data = snapshot.val();
-  games = data || [];
-  applyFilters();
-  toggleAuthUI(false);
-}).catch(console.error);
+    database.ref(`users/${currentUser.uid}`).once("value").then(snapshot => {
+      const data = snapshot.val();
+      games = data?.games || []; // ❗ Не используем localStorage, если пользователь залогинен
 
-} else {
-  currentUser = null;
-  authBtn.textContent = "Войти через Google";
-  userStatus.textContent = "Вы не вошли";
-  games = []; // ❗ При выходе всегда чистим список
-  applyFilters();
-  toggleAuthUI(true);
-}
+      applyFilters();
+      toggleAuthUI(false);
+    }).catch(console.error);
+
+  } else {
+    currentUser = null;
+    authBtn.textContent = "Войти через Google";
+    userStatus.textContent = "Вы не вошли";
+    games = []; // ❗ При выходе всегда чистим список
+    applyFilters();
+    toggleAuthUI(true);
+  }
+});
 
 function toggleAuthUI(isVisible) {
   if (isLoadingAuth) return; // Пока проверяем — не показываем оверлей
@@ -184,8 +186,7 @@ function toggleAuthUI(isVisible) {
 // === Сохранение данных ===
 function saveData() {
   if (currentUser) {
-    // ✅ Пишем ТОЛЬКО в ветку games
-    database.ref(`users/${currentUser.uid}/games`).set(games);
+    database.ref(`users/${currentUser.uid}`).set({ games });
   } else {
     localStorage.setItem("games", JSON.stringify(games));
   }
