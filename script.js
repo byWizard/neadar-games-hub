@@ -160,12 +160,12 @@ auth.onAuthStateChanged((user) => {
     userStatus.textContent = `Вы вошли как ${user.displayName}`;
 
     // Загружаем данные только из Firebase
-    database.ref(`users/${currentUser.uid}`).once("value").then(snapshot => {
-      const data = snapshot.val();
-      games = data?.games || []; // ❗ Не используем localStorage, если пользователь залогинен
-
-      applyFilters();
-      toggleAuthUI(false);
+    database.ref(`users/${currentUser.uid}/games`).once("value").then(snapshot => {
+  const data = snapshot.val();
+  games = data || [];
+  applyFilters();
+  toggleAuthUI(false);
+});
     }).catch(console.error);
 
   } else {
@@ -186,7 +186,8 @@ function toggleAuthUI(isVisible) {
 // === Сохранение данных ===
 function saveData() {
   if (currentUser) {
-    database.ref(`users/${currentUser.uid}`).set({ games });
+    // ✅ Пишем ТОЛЬКО в ветку games
+    database.ref(`users/${currentUser.uid}/games`).set(games);
   } else {
     localStorage.setItem("games", JSON.stringify(games));
   }
