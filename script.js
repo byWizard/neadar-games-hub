@@ -186,7 +186,8 @@ function toggleAuthUI(isVisible) {
 // === Сохранение данных ===
 function saveData() {
   if (currentUser) {
-    database.ref(`users/${currentUser.uid}`).set({ games });
+    // ✅ Пишем ТОЛЬКО в ветку games
+    database.ref(`users/${currentUser.uid}/games`).set(games);
   } else {
     localStorage.setItem("games", JSON.stringify(games));
   }
