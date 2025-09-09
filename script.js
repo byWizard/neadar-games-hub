@@ -341,13 +341,25 @@ function updateCard(card, game) {
       </div>
     `;
 
-  const starsEl = card.querySelector(".stars");
-  updateStarDisplay(starsEl, game.rating || 0);
-
-  const descEl = card.querySelector(".description");
-  descEl.value = game.description || "";
+  cardsContainer.appendChild(card);
+  } else {
+    // Обновление существующей карточки
+    const statusEl = card.querySelector(".status");
+    statusEl.className = `status ${game.status}`;
+    statusEl.textContent = 
+      game.status === "done"
+        ? "Пройдена"
+        : game.status === "want"
+        ? "Хочу пройти"
+        : "Отложена";
+    
+    const starsEl = card.querySelector(".stars");
+    updateStarDisplay(starsEl, game.rating || 0);
+    
+    const descEl = card.querySelector(".description");
+    descEl.value = game.description || "";
+  }
 }
-
 function updateStarDisplay(container, rating) {
   container.querySelectorAll("span").forEach((star, idx) => {
     star.classList.toggle("active", idx < rating);
