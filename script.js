@@ -14,6 +14,7 @@ const userStatus = document.getElementById("userStatus");
 const themeToggle = document.getElementById("themeToggle");
 const authOnlyOverlay = document.getElementById("authOnlyOverlay");
 const authRequiredLoginBtn = document.getElementById("authRequiredLoginBtn");
+const container = document.querySelector(".container");
 
 let games = [];
 let currentUser = null;
