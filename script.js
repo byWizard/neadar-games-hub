@@ -318,15 +318,28 @@ deleteBtn.addEventListener("click", () => {
   updateStats();
 }
 
+// В функции updateCard замените создание карточки на:
 function updateCard(card, game) {
-  const statusEl = card.querySelector(".status");
-  statusEl.className = `status ${game.status}`;
-  statusEl.textContent =
-    game.status === "done"
-      ? "Пройдена"
-      : game.status === "want"
-      ? "Хочу пройти"
-      : "Отложена"; // Текст для нового статуса
+  if (!card) {
+    card = document.createElement("div");
+    card.className = "game-card";
+    card.setAttribute("data-id", game.id);
+    card.innerHTML = `
+      <img src="${game.image}" alt="${game.title}">
+      <div class="game-card-content">
+        <h2>${game.title}</h2>
+        <span class="status ${game.status}">${
+          game.status === "done"
+            ? "Пройдена"
+            : game.status === "want"
+            ? "Хочу пройти"
+            : "Отложена"
+        }</span>
+        <div class="stars" data-rating="${game.rating || 0}"></div>
+        <textarea class="description">${game.description || ""}</textarea>
+        <button class="delete-btn">🗑️ Удалить</button>
+      </div>
+    `;
 
   const starsEl = card.querySelector(".stars");
   updateStarDisplay(starsEl, game.rating || 0);
