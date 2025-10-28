@@ -296,10 +296,18 @@ statusEl.addEventListener("click", () => {
       // Удаление
 const deleteBtn = card.querySelector(".delete-btn");
 deleteBtn.addEventListener("click", () => {
-  games.splice(index, 1);
-  saveData();
-  applyFilters();
-  updateStats(); // ✅ Добавили обновление счётчика
+    // Найти игру в основном массиве по ID карточки
+    const gameId = card.dataset.id; // ID карточки соответствует ID игры
+    const gameIndex = games.findIndex(g => g.id == gameId); // Ищем индекс в основном массиве
+
+    if (gameIndex !== -1) { // Убедимся, что нашли
+        games.splice(gameIndex, 1); // Удаляем по правильному индексу
+        saveData();
+        applyFilters(); // Перерисовываем всё
+        updateStats();
+    } else {
+        console.warn("Игра с ID", gameId, "не найдена для удаления.");
+    }
 });
 
       cardsContainer.appendChild(card);
